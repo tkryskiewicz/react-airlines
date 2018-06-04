@@ -1,0 +1,40 @@
+{
+  "private": true,
+  "name": "react-airlines",
+  "version": "0.0.0",
+  "description": "An airlines website created using TypeScript and React",
+  "keywords": [
+    "airlines",
+    "typescript",
+    "react"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  ],
+  "homepage": "https://github.com/tkryskiewicz/react-airlines",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tkryskiewicz/react-airlines.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tkryskiewicz/react-airlines/issues",
+    "email": "contact@tkryskiewicz.com"
+  },
+  "author": {
+    "name": "Tomasz Kryśkiewicz",
+    "email": "contact@tkryskiewicz.com",
+    "url": "http://tkryskiewicz.com"
+  },
+  "contributors": [
+    {
+      "name": "Tomasz Kryśkiewicz",
+      "email": "contact@tkryskiewicz.com",
+      "url": "http://tkryskiewicz.com"
+    }
+  ],
+  "engines": {},
+  "dependencies": {}
+}
