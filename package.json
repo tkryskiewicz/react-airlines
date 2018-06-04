@@ -36,5 +36,8 @@
     }
   ],
   "engines": {},
-  "dependencies": {}
+  "dependencies": {},
+  "scripts": {
+    "start": "node src"
+  }
 }
