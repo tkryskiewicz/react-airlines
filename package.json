@@ -36,9 +36,14 @@
     }
   ],
   "engines": {},
-  "dependencies": {},
+  "dependencies": {
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0"
+  },
   "devDependencies": {
     "@types/html-webpack-plugin": "^2.30.3",
+    "@types/react": "^16.3.16",
+    "@types/react-dom": "^16.0.6",
     "@types/webpack": "^4.4.0",
     "awesome-typescript-loader": "^5.0.0",
     "html-webpack-plugin": "^3.2.0",

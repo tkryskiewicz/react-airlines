@@ -2,13 +2,13 @@ import * as Webpack from "webpack";
 import * as HtmlWebpackPlugin from "html-webpack-plugin";
 
 const config: Webpack.Configuration = {
-  entry: "./src",
+  entry: "./src/index.tsx",
   mode: "development",
   module: {
     rules: [
       {
         loader: "awesome-typescript-loader",
-        test: /\.ts$/,
+        test: /\.tsx?$/,
       },
     ],
   },
@@ -19,6 +19,7 @@ const config: Webpack.Configuration = {
   ],
   resolve: {
     extensions: [
+      ".tsx",
       ".ts",
       ".js",
     ],
