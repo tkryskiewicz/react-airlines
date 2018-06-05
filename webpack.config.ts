@@ -20,6 +20,7 @@ const config: Webpack.Configuration = {
   resolve: {
     extensions: [
       ".ts",
+      ".js",
     ],
   },
 };
