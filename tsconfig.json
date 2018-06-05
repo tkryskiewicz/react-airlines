@@ -1,8 +1,13 @@
 {
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDirs": [
+      "src"
+    ],
     "outDir": "dist",
     "target": "es5",
+    "lib": [
+      "es6"
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
