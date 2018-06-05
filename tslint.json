@@ -1,0 +1,13 @@
+{
+  "extends": [
+    "tslint:latest",
+    "tslint-sonarts",
+    "tslint-react"
+  ],
+  "rules": {
+    "no-implicit-dependencies": [
+      true,
+      "dev"
+    ]
+  }
+}

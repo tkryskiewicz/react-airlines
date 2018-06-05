@@ -1,5 +1,5 @@
-import * as Webpack from "webpack";
 import * as HtmlWebpackPlugin from "html-webpack-plugin";
+import * as Webpack from "webpack";
 
 const config: Webpack.Configuration = {
   entry: "./src/index.tsx",
