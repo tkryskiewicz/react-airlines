@@ -4,6 +4,9 @@ module.exports = {
     "tsx",
     "js",
   ],
+  setupFiles: [
+    "<rootDir>/tests/test-setup.ts",
+  ],
   testMatch: [
     "**/*.test.(ts|tsx)",
   ],
