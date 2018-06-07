@@ -10,6 +10,13 @@ const config: Webpack.Configuration = {
         loader: "awesome-typescript-loader",
         test: /\.tsx?$/,
       },
+      {
+        test: /\.css$/,
+        use: [
+          "style-loader",
+          "css-loader",
+        ],
+      },
     ],
   },
   plugins: [

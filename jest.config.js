@@ -4,6 +4,9 @@ module.exports = {
     "tsx",
     "js",
   ],
+  moduleNameMapper: {
+    "\\.css$": "<rootDir>/tests/styleMock.ts",
+  },
   setupFiles: [
     "<rootDir>/tests/test-setup.ts",
   ],
