@@ -11,6 +11,7 @@
     ],
     "module": "commonjs",
     "moduleResolution": "node",
+    "allowJs": true,
     "jsx": "react",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
