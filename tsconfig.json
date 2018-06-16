@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "rootDirs": [
       "src"
     ],
@@ -11,6 +12,11 @@
     ],
     "module": "commonjs",
     "moduleResolution": "node",
+    "paths": {
+      "ra-api": [
+        "src/api"
+      ]
+    },
     "allowJs": true,
     "jsx": "react",
     "forceConsistentCasingInFileNames": true,

@@ -5,13 +5,21 @@
     "tslint-react"
   ],
   "rules": {
-    "no-implicit-dependencies": [
+    "interface-name": [
       true,
-      "dev"
+      "never-prefix"
     ],
+    "jsx-no-multiline-js": false,
+    "no-empty-interface": false,
+    "no-implicit-dependencies": false, // tslint doesn't support path mapping
     "no-submodule-imports": [
       true,
       "antd"
+    ],
+    "variable-name": [
+      true,
+      "allow-pascal-case",
+      "allow-leading-underscore"
     ]
   }
 }

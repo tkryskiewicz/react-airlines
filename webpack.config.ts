@@ -1,13 +1,17 @@
+import { TsConfigPathsPlugin } from "awesome-typescript-loader";
 import * as HtmlWebpackPlugin from "html-webpack-plugin";
 import * as Webpack from "webpack";
 
 const config: Webpack.Configuration = {
-  entry: "./src/index.tsx",
+  entry: "./src/client/index.tsx",
   mode: "development",
   module: {
     rules: [
       {
         loader: "awesome-typescript-loader",
+        options: {
+          configFileName: "tsconfig-build.json",
+        },
         test: /\.tsx?$/,
       },
       {
@@ -21,7 +25,7 @@ const config: Webpack.Configuration = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "src/index.html",
+      template: "src/client/index.html",
     }),
   ],
   resolve: {
@@ -29,6 +33,9 @@ const config: Webpack.Configuration = {
       ".tsx",
       ".ts",
       ".js",
+    ],
+    plugins: [
+      new TsConfigPathsPlugin(),
     ],
   },
 };
