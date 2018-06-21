@@ -1,11 +1,13 @@
-import { Button, Form, message } from "antd";
+import { Button, DatePicker, Form, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
+import * as Moment from "moment";
 import * as React from "react";
 
 import { Airport } from "../Airport";
 import { AirportService } from "../AirportService";
 import { Route } from "../Route";
 import { RouteSelector } from "../RouteSelector";
+import { TimetableService } from "../TimetableService";
 
 export interface FlightSearchProps extends FormComponentProps {
 }
@@ -13,16 +15,20 @@ export interface FlightSearchProps extends FormComponentProps {
 interface FlightSearchState {
   airports: Airport[];
   route: Route;
+  departureDates: Moment.Moment[];
+  departureDate?: Moment.Moment;
 }
 
 export class FlightSearch extends React.Component<FlightSearchProps, FlightSearchState> {
   private airportService = new AirportService();
+  private timetableService = new TimetableService();
 
   constructor(props: FlightSearchProps) {
     super(props);
 
     this.state = {
       airports: [],
+      departureDates: [],
       route: new Route(),
     };
   }
@@ -42,6 +48,8 @@ export class FlightSearch extends React.Component<FlightSearchProps, FlightSearc
   }
 
   public render() {
+    const { getFieldDecorator } = this.props.form;
+
     return (
       <Form onSubmit={this.onSearch}>
         <RouteSelector
@@ -51,6 +59,20 @@ export class FlightSearch extends React.Component<FlightSearchProps, FlightSearc
           value={this.state.route}
           onChange={this.onRouteChange}
         />
+        <Form.Item label="Departure date">
+          {getFieldDecorator("departureDate", {
+            initialValue: this.state.departureDate,
+            rules: [
+              { required: true, message: "This field is required" },
+              { validator: this.validateDepartureDate, message: "No flights on this date" },
+            ],
+          })(
+            <DatePicker
+              disabledDate={this.isInvalidDepartureDate}
+              onChange={this.onDepartureDateChange}
+            />,
+          )}
+        </Form.Item>
         <Button type="primary" htmlType="submit">
           Search
         </Button>
@@ -61,7 +83,51 @@ export class FlightSearch extends React.Component<FlightSearchProps, FlightSearc
   private onRouteChange = (route: Route) => {
     this.setState({
       route,
+    }, async () => {
+      if (route.origin && route.destination) {
+        const departureDates = await this.timetableService.getDepartureDates(route);
+
+        let { departureDate } = this.state;
+
+        if (departureDate && !departureDates.some((d) => d.isSame(departureDate, "d"))) {
+          departureDate = undefined;
+
+          this.props.form.setFields({
+            departureDate: undefined,
+          });
+        }
+
+        this.setState({
+          departureDate,
+          departureDates,
+        });
+      } else {
+        this.setState({
+          departureDates: [],
+        });
+      }
     });
+  }
+
+  private isInvalidDepartureDate = (current: Moment.Moment) => {
+    const isValid = current && current.isSameOrAfter(Moment(), "d") &&
+      this.state.departureDates.some((d) => d.isSame(current, "d"));
+
+    return !isValid;
+  }
+
+  private onDepartureDateChange = (departureDate: Moment.Moment) => {
+    this.setState({
+      departureDate,
+    });
+  }
+
+  private validateDepartureDate = (rule: any, value: Moment.Moment | undefined, callback: any) => {
+    if (value && !this.state.departureDates.some((d) => d.isSame(value, "d"))) {
+      callback([rule.message]);
+    }
+
+    callback();
   }
 
   private onSearch = (event: React.FormEvent<any>) => {
@@ -69,8 +135,10 @@ export class FlightSearch extends React.Component<FlightSearchProps, FlightSearc
 
     this.props.form.validateFields((errors) => {
       if (!errors) {
+        const { route, departureDate } = this.state;
+
         // tslint:disable-next-line
-        console.log(`Searching for flights from ${this.state.route.origin} to ${this.state.route.destination}`);
+        console.log(`Searching for flights from ${route.origin} to ${route.destination} on ${departureDate!.toDate().toDateString()}`);
       }
     });
   }

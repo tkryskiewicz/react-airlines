@@ -1,9 +1,11 @@
 import * as Cors from "cors";
 import * as Express from "express";
 
+import { createDocumentStore, initializeDocumentStore } from "ra-document-store";
+
 import { registerAirportsApi } from "./airports";
-import { createDocumentStore } from "./documentStore";
 import { ravenDbRequestHandler } from "./ravenDbRequestHandler";
+import { registerTimetableApi } from "./timetable";
 
 const app = Express();
 
@@ -13,7 +15,18 @@ const documentStore = createDocumentStore("http://localhost:8080", "react-airlin
 
 app.use(ravenDbRequestHandler(documentStore));
 
+app.get("/init", async (_req, res) => {
+  try {
+    await initializeDocumentStore(documentStore);
+
+    res.sendStatus(200);
+  } catch {
+    res.sendStatus(500);
+  }
+});
+
 registerAirportsApi(app);
+registerTimetableApi(app);
 
 const Port = 5000;
 

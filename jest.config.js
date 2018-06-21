@@ -6,6 +6,7 @@ module.exports = {
   ],
   moduleNameMapper: {
     "\\.css$": "<rootDir>/tests/styleMock.ts",
+    "ra-(.*)": "<rootDir>/src/$1",
   },
   setupFiles: [
     "<rootDir>/tests/test-setup.ts",

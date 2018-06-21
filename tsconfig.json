@@ -13,8 +13,8 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "paths": {
-      "ra-api": [
-        "src/api"
+      "ra-*": [
+        "src/*"
       ]
     },
     "allowJs": true,
