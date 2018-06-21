@@ -3,6 +3,7 @@ import * as HtmlWebpackPlugin from "html-webpack-plugin";
 import * as Webpack from "webpack";
 
 const config: Webpack.Configuration = {
+  devtool: "cheap-module-source-map",
   entry: "./src/client/index.tsx",
   mode: "development",
   module: {
