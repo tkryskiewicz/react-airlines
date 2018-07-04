@@ -4,6 +4,7 @@ import { Route, Switch } from "react-router-dom";
 
 import { FlightSelectionPage } from "./FlightSelectionPage";
 import { HomePage } from "./HomePage";
+import { PaymentPage } from "./PaymentPage";
 
 export class App extends React.Component {
   public render() {
@@ -22,6 +23,7 @@ export class App extends React.Component {
             <Switch>
               <Route path="/" exact={true} component={HomePage} />
               <Route path="/booking/:origin/:destination/:departureDate" component={FlightSelectionPage} />
+              <Route path="/booking/payment" component={PaymentPage} />
             </Switch>
           </Layout.Content>
           <Layout.Footer>
