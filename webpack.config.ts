@@ -3,6 +3,9 @@ import * as HtmlWebpackPlugin from "html-webpack-plugin";
 import * as Webpack from "webpack";
 
 const config: Webpack.Configuration = {
+  devServer: {
+    historyApiFallback: true,
+  },
   devtool: "cheap-module-source-map",
   entry: "./src/client/index.tsx",
   mode: "development",
@@ -23,6 +26,9 @@ const config: Webpack.Configuration = {
         ],
       },
     ],
+  },
+  output: {
+    publicPath: "/",
   },
   plugins: [
     new HtmlWebpackPlugin({

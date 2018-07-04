@@ -1,7 +1,9 @@
 import { Layout } from "antd";
 import * as React from "react";
+import { Route, Switch } from "react-router-dom";
 
-import { FlightSearch } from "./FlightSearch";
+import { FlightSelectionPage } from "./FlightSelectionPage";
+import { HomePage } from "./HomePage";
 
 export class App extends React.Component {
   public render() {
@@ -17,13 +19,10 @@ export class App extends React.Component {
             </a>
           </Layout.Header>
           <Layout.Content>
-            <h1>
-              react-airlines
-            </h1>
-            <p>
-              An airlines website created using TypeScript and React.
-            </p>
-            <FlightSearch />
+            <Switch>
+              <Route path="/" exact={true} component={HomePage} />
+              <Route path="/booking/:origin/:destination/:departureDate" component={FlightSelectionPage} />
+            </Switch>
           </Layout.Content>
           <Layout.Footer>
             2018 &copy; react-airlines. All rights reserved.
