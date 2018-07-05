@@ -8,6 +8,7 @@ import { Country } from "../Country";
 const FieldEmptyMessage = "This field is required";
 
 export interface AddressFormProps extends FormComponentProps {
+  countries: Country[];
   required?: boolean;
   value: Address;
   onChange?: (value: Address) => void;
@@ -16,8 +17,6 @@ export interface AddressFormProps extends FormComponentProps {
 export class AddressForm extends React.Component<AddressFormProps> {
   public render() {
     const { getFieldDecorator } = this.props.form;
-
-    const countries: Country[] = [];
 
     return (
       <>
@@ -75,7 +74,7 @@ export class AddressForm extends React.Component<AddressFormProps> {
               style={{ width: "100%" }}
               placeholder="Select country"
             >
-              {countries.map(this.renderCountry)}
+              {this.props.countries.map(this.renderCountry)}
             </Select>,
           )}
         </Form.Item>

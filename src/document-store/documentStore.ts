@@ -2,12 +2,16 @@ import * as Moment from "moment";
 import { DocumentStore, IDocumentStore } from "ravendb";
 
 import { Airport } from "./Airport";
+import { Country } from "./Country";
 import { Flight } from "./Flight";
 
 export const createDocumentStore = (url: string, database: string) => {
   const documentStore = new DocumentStore(url, database);
 
   documentStore.conventions
+    .registerEntityType(Country)
+    .registerIdConvention<Country>(Country, async (_database, entity: object) =>
+      `${documentStore.conventions.getCollectionNameForType(Country)}/${(entity as Country).code}`)
     .registerEntityType(Airport)
     .registerIdConvention<Airport>(Airport, async (_database, entity: object) =>
       `${documentStore.conventions.getCollectionNameForType(Airport)}/${(entity as Airport).code}`)
@@ -18,6 +22,20 @@ export const createDocumentStore = (url: string, database: string) => {
 
 export const initializeDocumentStore = async (documentStore: IDocumentStore) => {
   const documentSession = documentStore.openSession();
+
+  const countries = [
+    new Country("AU", "Australia"),
+    new Country("CA", "Canada"),
+    new Country("PL", "Poland"),
+    new Country("UK", "United Kingdom"),
+    new Country("US", "United States of America"),
+  ];
+
+  await Promise.all(countries.map(async (c) => {
+    await documentSession.store(c);
+
+    await documentSession.saveChanges();
+  }));
 
   const airports = [
     new Airport("WRO", "Wroclaw", ["ATL", "STN"]),
