@@ -26,7 +26,7 @@ export class App extends React.Component {
               <Route path="/booking/payment" component={PaymentPage} />
             </Switch>
           </Layout.Content>
-          <Layout.Footer>
+          <Layout.Footer style={{ textAlign: "center" }}>
             2018 &copy; react-airlines. All rights reserved.
           </Layout.Footer>
         </Layout>
