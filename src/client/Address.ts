@@ -7,6 +7,18 @@ export class Address {
     public city: string = "",
     public postalCode: string = "",
     public country: CountryCode = "",
+    public region: string = "",
   ) {
+  }
+
+  public clone() {
+    return new Address(
+      this.addressLine1,
+      this.addressLine2,
+      this.city,
+      this.postalCode,
+      this.country,
+      this.region,
+    );
   }
 }

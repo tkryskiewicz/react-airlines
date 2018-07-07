@@ -1,9 +1,10 @@
 import { Form, Input, Select } from "antd";
 import { FormComponentProps } from "antd/lib/form";
+import { SelectValue } from "antd/lib/select";
 import * as React from "react";
 
 import { Address } from "../Address";
-import { Country } from "../Country";
+import { Country, CountryRegion } from "../Country";
 
 const FieldEmptyMessage = "This field is required";
 
@@ -18,6 +19,8 @@ export class AddressForm extends React.Component<AddressFormProps> {
   public render() {
     const { getFieldDecorator } = this.props.form;
 
+    const country = this.props.countries.find((c) => c.code === this.props.value.country);
+
     return (
       <>
         <Form.Item label="Address 1">
@@ -27,6 +30,7 @@ export class AddressForm extends React.Component<AddressFormProps> {
             ],
           })(
             <Input
+              name="addressLine1"
               maxLength={50}
               placeholder="e.g. 21 Sun Lane"
             />,
@@ -35,6 +39,7 @@ export class AddressForm extends React.Component<AddressFormProps> {
         <Form.Item label="Address 2">
           {getFieldDecorator("addressLine2")(
             <Input
+              name="addressLine2"
               maxLength={50}
               placeholder="e.g. Sun Land"
             />,
@@ -47,6 +52,7 @@ export class AddressForm extends React.Component<AddressFormProps> {
             ],
           })(
             <Input
+              name="city"
               maxLength={50}
               placeholder="e.g. Dublin"
             />,
@@ -59,6 +65,7 @@ export class AddressForm extends React.Component<AddressFormProps> {
             ],
           })(
             <Input
+              name="postalCode"
               maxLength={10}
               placeholder="e.g. 12345"
             />,
@@ -73,11 +80,13 @@ export class AddressForm extends React.Component<AddressFormProps> {
             <Select
               style={{ width: "100%" }}
               placeholder="Select country"
+              onChange={this.onCountryChange}
             >
               {this.props.countries.map(this.renderCountry)}
             </Select>,
           )}
         </Form.Item>
+        {country && country.hasRegions && this.renderRegionSelection(country)}
       </>
     );
   }
@@ -88,5 +97,65 @@ export class AddressForm extends React.Component<AddressFormProps> {
         {country.name}
       </Select.Option>
     );
+  }
+
+  private onCountryChange = (val: SelectValue) => {
+    if (!this.props.onChange) {
+      return;
+    }
+
+    const value = this.props.value.clone();
+
+    value.country = val.toString();
+
+    if (value.region) {
+      this.props.form.setFields({ region: "" });
+    }
+
+    value.region = "";
+
+    this.props.onChange(value);
+  }
+
+  private renderRegionSelection(country: Country) {
+    const { getFieldDecorator } = this.props.form;
+
+    return (
+      <Form.Item label="Region">
+        {getFieldDecorator("region", {
+          rules: [
+            { required: true, message: FieldEmptyMessage },
+          ],
+        })(
+          <Select
+            style={{ width: "100%" }}
+            placeholder="Select region"
+            onChange={this.onRegionChange}
+          >
+            {country.regions.map(this.renderRegion)}
+          </Select>,
+        )}
+      </Form.Item>
+    );
+  }
+
+  private renderRegion(region: CountryRegion) {
+    return (
+      <Select.Option key={region.code} value={region.code}>
+        {region.name}
+      </Select.Option>
+    );
+  }
+
+  private onRegionChange = (val: SelectValue) => {
+    if (!this.props.onChange) {
+      return;
+    }
+
+    const value = this.props.value.clone();
+
+    value.region = val.toString();
+
+    this.props.onChange(value);
   }
 }

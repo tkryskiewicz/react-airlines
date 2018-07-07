@@ -10,6 +10,7 @@ export const registerCountriesApi = (app: Express.Express) => {
     const countries: CountryData[] = documents.map((d) => ({
       code: d.code,
       name: d.name,
+      regions: d.regions,
     }));
 
     res.send(countries);

@@ -10,6 +10,7 @@ export class CountryService extends ServiceBase {
     return response.data.map((i) => new Country(
       i.code,
       i.name,
+      i.regions,
     ));
   }
 }
