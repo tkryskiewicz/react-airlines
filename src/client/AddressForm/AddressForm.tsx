@@ -4,7 +4,7 @@ import { SelectValue } from "antd/lib/select";
 import * as React from "react";
 
 import { Address } from "../Address";
-import { Country, CountryRegion } from "../Country";
+import { Country, CountryRegion, RegionType } from "../Country";
 
 const FieldEmptyMessage = "This field is required";
 
@@ -120,8 +120,28 @@ export class AddressForm extends React.Component<AddressFormProps> {
   private renderRegionSelection(country: Country) {
     const { getFieldDecorator } = this.props.form;
 
+    let messages = {
+      label: "Region",
+      placeholder: "Select region",
+    };
+
+    switch (country.regionType) {
+      case RegionType.State:
+        messages = {
+          label: "State",
+          placeholder: "Select state",
+        };
+        break;
+      case RegionType.Province:
+        messages = {
+          label: "Province",
+          placeholder: "Select province",
+        };
+        break;
+    }
+
     return (
-      <Form.Item label="Region">
+      <Form.Item label={messages.label}>
         {getFieldDecorator("region", {
           rules: [
             { required: true, message: FieldEmptyMessage },
@@ -129,7 +149,7 @@ export class AddressForm extends React.Component<AddressFormProps> {
         })(
           <Select
             style={{ width: "100%" }}
-            placeholder="Select region"
+            placeholder={messages.placeholder}
             onChange={this.onRegionChange}
           >
             {country.regions.map(this.renderRegion)}

@@ -24,7 +24,7 @@ export const initializeDocumentStore = async (documentStore: IDocumentStore) => 
   const documentSession = documentStore.openSession();
 
   const countries = [
-    new Country("AU", "Australia", [
+    new Country("AU", "Australia", "state", [
       { code: "ACT", name: "Australian Capital Territory" },
       { code: "NSW", name: "New South Wales" },
       { code: "NT", name: "Northern Territory" },
@@ -34,7 +34,7 @@ export const initializeDocumentStore = async (documentStore: IDocumentStore) => 
       { code: "VIC", name: "Victoria" },
       { code: "WA", name: "Western Australia" },
     ]),
-    new Country("CA", "Canada", [
+    new Country("CA", "Canada", "province", [
       { code: "AB", name: "Alberta" },
       { code: "BC", name: "British Columbia" },
       { code: "MB", name: "Manitoba" },
@@ -51,7 +51,7 @@ export const initializeDocumentStore = async (documentStore: IDocumentStore) => 
     ]),
     new Country("PL", "Poland"),
     new Country("UK", "United Kingdom"),
-    new Country("US", "United States of America", [
+    new Country("US", "United States of America", "state", [
       { code: "AL", name: "Alabama" },
       { code: "AK", name: "Alaska" },
       { code: "AZ", name: "Arizona" },

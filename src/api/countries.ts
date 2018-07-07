@@ -8,5 +8,6 @@ export interface CountryRegionData {
 export interface CountryData {
   code: string;
   name: string;
-  regions: CountryRegionData[];
+  regionType?: string;
+  regions?: CountryRegionData[];
 }

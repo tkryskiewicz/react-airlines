@@ -1,6 +1,6 @@
 import { CountryData, getCountriesUrl } from "ra-api";
 
-import { Country } from "./Country";
+import { Country, RegionType } from "./Country";
 import { ServiceBase } from "./ServiceBase";
 
 export class CountryService extends ServiceBase {
@@ -10,6 +10,7 @@ export class CountryService extends ServiceBase {
     return response.data.map((i) => new Country(
       i.code,
       i.name,
+      i.regionType as RegionType,
       i.regions,
     ));
   }
