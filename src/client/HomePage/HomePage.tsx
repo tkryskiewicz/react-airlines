@@ -1,8 +1,14 @@
+import * as Moment from "moment";
 import * as React from "react";
+import { RouteComponentProps } from "react-router";
 
 import { FlightSearch } from "../FlightSearch";
+import { Route } from "../Route";
 
-export class HomePage extends React.Component {
+export interface HomePageProps extends RouteComponentProps<{ language: string }> {
+}
+
+export class HomePage extends React.Component<HomePageProps> {
   public render() {
     return (
       <>
@@ -12,8 +18,15 @@ export class HomePage extends React.Component {
         <p>
           An airlines website created using TypeScript and React.
         </p>
-        <FlightSearch />
+        <FlightSearch onSearch={this.onFlightSearch} />
       </>
+    );
+  }
+
+  private onFlightSearch = (route: Route, departureDate: Moment.Moment) => {
+    this.props.history.push(
+      // FIXME: this.props.match.path should work
+      `${this.props.match.params.language}/booking/${route.origin}/${route.destination}/${departureDate.format("YYYY-MM-DD")}`,
     );
   }
 }
