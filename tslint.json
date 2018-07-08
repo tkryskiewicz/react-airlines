@@ -10,12 +10,18 @@
       "never-prefix"
     ],
     "jsx-no-multiline-js": false,
+    "max-line-length": [
+      true,
+      140
+    ],
     "no-empty-interface": false,
     "no-implicit-dependencies": false, // tslint doesn't support path mapping
     "no-submodule-imports": [
       true,
-      "antd"
+      "antd",
+      "react-intl"
     ],
+    "no-var-requires": false,
     "variable-name": [
       true,
       "allow-pascal-case",

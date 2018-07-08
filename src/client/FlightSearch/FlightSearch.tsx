@@ -2,7 +2,6 @@ import { Button, DatePicker, Form, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import * as Moment from "moment";
 import * as React from "react";
-import { RouteComponentProps, withRouter } from "react-router";
 
 import { Airport } from "../Airport";
 import { AirportService } from "../AirportService";
@@ -10,7 +9,8 @@ import { Route } from "../Route";
 import { RouteSelector } from "../RouteSelector";
 import { TimetableService } from "../TimetableService";
 
-export interface FlightSearchProps extends FormComponentProps, RouteComponentProps<{}> {
+export interface FlightSearchProps extends FormComponentProps {
+  onSearch: (route: Route, departureDate: Moment.Moment) => void;
 }
 
 interface FlightSearchState {
@@ -138,10 +138,10 @@ export class FlightSearch extends React.Component<FlightSearchProps, FlightSearc
       if (!errors) {
         const { route, departureDate } = this.state;
 
-        this.props.history.push(`/booking/${route.origin}/${route.destination}/${departureDate!.format("YYYY-MM-DD")}`);
+        this.props.onSearch(route, departureDate!);
       }
     });
   }
 }
 
-export const FlightSearchWrapped = withRouter(Form.create()(FlightSearch));
+export const FlightSearchWrapped = Form.create()(FlightSearch);
