@@ -2,13 +2,13 @@ import { Form, Input, Select } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { SelectValue } from "antd/lib/select";
 import * as React from "react";
+import { FormattedMessage, InjectedIntlProps, injectIntl } from "react-intl";
 
 import { Address } from "../Address";
 import { Country, CountryRegion, RegionType } from "../Country";
+import { addressFormMessages } from "./messages";
 
-const FieldEmptyMessage = "This field is required";
-
-export interface AddressFormProps extends FormComponentProps {
+export interface AddressFormProps extends FormComponentProps, InjectedIntlProps {
   countries: Country[];
   required?: boolean;
   value: Address;
@@ -18,68 +18,69 @@ export interface AddressFormProps extends FormComponentProps {
 export class AddressForm extends React.Component<AddressFormProps> {
   public render() {
     const { getFieldDecorator } = this.props.form;
+    const { formatMessage } = this.props.intl;
 
     const country = this.props.countries.find((c) => c.code === this.props.value.country);
 
     return (
       <>
-        <Form.Item label="Address 1">
+        <Form.Item label={<FormattedMessage {...addressFormMessages.addressLine1Label} />}>
           {getFieldDecorator("addressLine1", {
             rules: [
-              { required: this.props.required, message: FieldEmptyMessage },
+              { required: this.props.required, message: formatMessage(addressFormMessages.addressLine1EmptyError) },
             ],
           })(
             <Input
               name="addressLine1"
               maxLength={50}
-              placeholder="e.g. 21 Sun Lane"
+              placeholder={formatMessage(addressFormMessages.addressLine1Placeholder)}
             />,
           )}
         </Form.Item>
-        <Form.Item label="Address 2">
+        <Form.Item label={<FormattedMessage {...addressFormMessages.addressLine2Label} />}>
           {getFieldDecorator("addressLine2")(
             <Input
               name="addressLine2"
               maxLength={50}
-              placeholder="e.g. Sun Land"
+              placeholder={formatMessage(addressFormMessages.addressLine2Placeholder)}
             />,
           )}
         </Form.Item>
-        <Form.Item label="City">
+        <Form.Item label={<FormattedMessage {...addressFormMessages.cityLabel} />}>
           {getFieldDecorator("city", {
             rules: [
-              { required: this.props.required, message: FieldEmptyMessage },
+              { required: this.props.required, message: formatMessage(addressFormMessages.cityEmptyError) },
             ],
           })(
             <Input
               name="city"
               maxLength={50}
-              placeholder="e.g. Dublin"
+              placeholder={formatMessage(addressFormMessages.cityPlaceholder)}
             />,
           )}
         </Form.Item>
-        <Form.Item label="Postal code">
+        <Form.Item label={<FormattedMessage {...addressFormMessages.postalCodeLabel} />}>
           {getFieldDecorator("postalCode", {
             rules: [
-              { required: this.props.required, message: FieldEmptyMessage },
+              { required: this.props.required, message: formatMessage(addressFormMessages.postalCodeEmptyError) },
             ],
           })(
             <Input
               name="postalCode"
               maxLength={10}
-              placeholder="e.g. 12345"
+              placeholder={formatMessage(addressFormMessages.postalCodePlaceholder)}
             />,
           )}
         </Form.Item>
-        <Form.Item label="Country">
+        <Form.Item label={<FormattedMessage {...addressFormMessages.countryLabel} />}>
           {getFieldDecorator("country", {
             rules: [
-              { required: this.props.required, message: FieldEmptyMessage },
+              { required: this.props.required, message: formatMessage(addressFormMessages.countryEmptyError) },
             ],
           })(
             <Select
               style={{ width: "100%" }}
-              placeholder="Select country"
+              placeholder={<FormattedMessage {...addressFormMessages.countryPlaceholder} />}
               onChange={this.onCountryChange}
             >
               {this.props.countries.map(this.renderCountry)}
@@ -119,37 +120,41 @@ export class AddressForm extends React.Component<AddressFormProps> {
 
   private renderRegionSelection(country: Country) {
     const { getFieldDecorator } = this.props.form;
+    const { formatMessage } = this.props.intl;
 
     let messages = {
-      label: "Region",
-      placeholder: "Select region",
+      emptyError: addressFormMessages.regionEmptyError,
+      label: addressFormMessages.regionLabel,
+      placeholder: addressFormMessages.regionPlaceholder,
     };
 
     switch (country.regionType) {
       case RegionType.State:
         messages = {
-          label: "State",
-          placeholder: "Select state",
+          emptyError: addressFormMessages.stateEmptyError,
+          label: addressFormMessages.stateLabel,
+          placeholder: addressFormMessages.statePlaceholder,
         };
         break;
       case RegionType.Province:
         messages = {
-          label: "Province",
-          placeholder: "Select province",
+          emptyError: addressFormMessages.provinceEmptyError,
+          label: addressFormMessages.provinceLabel,
+          placeholder: addressFormMessages.provincePlaceholder,
         };
         break;
     }
 
     return (
-      <Form.Item label={messages.label}>
+      <Form.Item label={<FormattedMessage {...messages.label} />}>
         {getFieldDecorator("region", {
           rules: [
-            { required: true, message: FieldEmptyMessage },
+            { required: true, message: formatMessage(messages.emptyError) },
           ],
         })(
           <Select
             style={{ width: "100%" }}
-            placeholder={messages.placeholder}
+            placeholder={<FormattedMessage {...messages.placeholder} />}
             onChange={this.onRegionChange}
           >
             {country.regions.map(this.renderRegion)}
@@ -179,3 +184,5 @@ export class AddressForm extends React.Component<AddressFormProps> {
     this.props.onChange(value);
   }
 }
+
+export const AddressFormWrapped = injectIntl(AddressForm);

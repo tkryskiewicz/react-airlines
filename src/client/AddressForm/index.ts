@@ -1,1 +1,1 @@
-export { AddressForm } from "./AddressForm";
+export { AddressFormWrapped as AddressForm } from "./AddressForm";
