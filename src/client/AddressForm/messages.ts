@@ -95,4 +95,16 @@ export const addressFormMessages = defineMessages({
     defaultMessage: "Select state",
     id: "addressForm.region.state.placeholder",
   },
+  zipCodeEmptyError: {
+    ...messages.emptyError,
+    id: "addressForm.postalCode.zipCode.emptyError",
+  },
+  zipCodeLabel: {
+    defaultMessage: "ZIP Code",
+    id: "addressForm.postalCode.zipCode.label",
+  },
+  zipCodePlaceholder: {
+    defaultMessage: "e.g. 12345",
+    id: "addressForm.postalCode.zipCode.placeholder",
+  },
 });

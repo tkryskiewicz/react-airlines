@@ -9,6 +9,7 @@ export interface CountryData {
   code: string;
   name: string;
   hasPostalCodes?: boolean;
+  postalCodeType?: string;
   isPostalCodeRequired?: boolean;
   regionType?: string;
   regions?: CountryRegionData[];

@@ -5,7 +5,7 @@ import * as React from "react";
 import { FormattedMessage, InjectedIntlProps, injectIntl } from "react-intl";
 
 import { Address } from "../Address";
-import { Country, CountryRegion, RegionType } from "../Country";
+import { Country, CountryRegion, PostalCodeType, RegionType } from "../Country";
 import { addressFormMessages } from "./messages";
 
 export interface AddressFormProps extends FormComponentProps {
@@ -176,17 +176,31 @@ export class AddressForm extends React.Component<AddressFormProps & InjectedIntl
     const { getFieldDecorator } = this.props.form;
     const { formatMessage } = this.props.intl;
 
+    let messages = {
+      emptyError: addressFormMessages.postalCodeEmptyError,
+      label: addressFormMessages.postalCodeLabel,
+      placeholder: addressFormMessages.postalCodePlaceholder,
+    };
+
+    if (country.postalCodeType === PostalCodeType.ZipCode) {
+      messages = {
+        emptyError: addressFormMessages.zipCodeEmptyError,
+        label: addressFormMessages.zipCodeLabel,
+        placeholder: addressFormMessages.zipCodePlaceholder,
+      };
+    }
+
     return (
-      <Form.Item label={<FormattedMessage {...addressFormMessages.postalCodeLabel} />}>
+      <Form.Item label={<FormattedMessage {...messages.label} />}>
         {getFieldDecorator("postalCode", {
           rules: [
-            { required: country.isPostalCodeRequired, message: formatMessage(addressFormMessages.postalCodeEmptyError) },
+            { required: country.isPostalCodeRequired, message: formatMessage(messages.emptyError) },
           ],
         })(
           <Input
             name="postalCode"
             maxLength={10}
-            placeholder={formatMessage(addressFormMessages.postalCodePlaceholder)}
+            placeholder={formatMessage(messages.placeholder)}
           />,
         )}
       </Form.Item>

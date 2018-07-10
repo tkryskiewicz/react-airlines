@@ -12,6 +12,7 @@ export const registerCountriesApi = (app: Express.Express) => {
       hasPostalCodes: d.hasPostalCodes,
       isPostalCodeRequired: d.isPostalCodeRequired,
       name: d.name,
+      postalCodeType: d.postalCodeType,
       regionType: d.regionType,
       regions: d.regions,
     }));

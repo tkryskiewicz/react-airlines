@@ -8,6 +8,7 @@ export class Country {
     public code: string,
     public name: string,
     public hasPostalCodes: boolean = false,
+    public postalCodeType?: string,
     public isPostalCodeRequired: boolean = false,
     public regionType?: string,
     public regions: Region[] = [],

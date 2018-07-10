@@ -1,6 +1,6 @@
 import { CountryData, getCountriesUrl } from "ra-api";
 
-import { Country, RegionType } from "./Country";
+import { Country, PostalCodeType, RegionType } from "./Country";
 import { ServiceBase } from "./ServiceBase";
 
 export class CountryService extends ServiceBase {
@@ -11,6 +11,7 @@ export class CountryService extends ServiceBase {
       i.code,
       i.name,
       i.hasPostalCodes,
+      i.postalCodeType as PostalCodeType,
       i.isPostalCodeRequired,
       i.regionType as RegionType,
       i.regions,
