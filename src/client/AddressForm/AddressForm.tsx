@@ -8,14 +8,14 @@ import { Address } from "../Address";
 import { Country, CountryRegion, RegionType } from "../Country";
 import { addressFormMessages } from "./messages";
 
-export interface AddressFormProps extends FormComponentProps, InjectedIntlProps {
+export interface AddressFormProps extends FormComponentProps {
   countries: Country[];
   required?: boolean;
   value: Address;
-  onChange?: (value: Address) => void;
+  onChange?: (value: Address, callback: () => void) => void;
 }
 
-export class AddressForm extends React.Component<AddressFormProps> {
+export class AddressForm extends React.Component<AddressFormProps & InjectedIntlProps> {
   public render() {
     const { getFieldDecorator } = this.props.form;
     const { formatMessage } = this.props.intl;
@@ -59,19 +59,7 @@ export class AddressForm extends React.Component<AddressFormProps> {
             />,
           )}
         </Form.Item>
-        <Form.Item label={<FormattedMessage {...addressFormMessages.postalCodeLabel} />}>
-          {getFieldDecorator("postalCode", {
-            rules: [
-              { required: this.props.required, message: formatMessage(addressFormMessages.postalCodeEmptyError) },
-            ],
-          })(
-            <Input
-              name="postalCode"
-              maxLength={10}
-              placeholder={formatMessage(addressFormMessages.postalCodePlaceholder)}
-            />,
-          )}
-        </Form.Item>
+        {country && country.hasPostalCodes && this.renderPostalCode(country)}
         <Form.Item label={<FormattedMessage {...addressFormMessages.countryLabel} />}>
           {getFieldDecorator("country", {
             rules: [
@@ -115,7 +103,7 @@ export class AddressForm extends React.Component<AddressFormProps> {
 
     value.region = "";
 
-    this.props.onChange(value);
+    this.props.onChange(value, this.revalidatePostalCode);
   }
 
   private renderRegionSelection(country: Country) {
@@ -181,7 +169,33 @@ export class AddressForm extends React.Component<AddressFormProps> {
 
     value.region = val.toString();
 
-    this.props.onChange(value);
+    this.props.onChange(value, () => undefined);
+  }
+
+  private renderPostalCode(country: Country) {
+    const { getFieldDecorator } = this.props.form;
+    const { formatMessage } = this.props.intl;
+
+    return (
+      <Form.Item label={<FormattedMessage {...addressFormMessages.postalCodeLabel} />}>
+        {getFieldDecorator("postalCode", {
+          rules: [
+            { required: country.isPostalCodeRequired, message: formatMessage(addressFormMessages.postalCodeEmptyError) },
+          ],
+        })(
+          <Input
+            name="postalCode"
+            maxLength={10}
+            placeholder={formatMessage(addressFormMessages.postalCodePlaceholder)}
+          />,
+        )}
+      </Form.Item>
+    );
+  }
+
+  private revalidatePostalCode() {
+    // FIXME: we need to re-validate postal code after country change and render
+    this.props.form.validateFields(["postalCode"], { force: true }, () => undefined);
   }
 }
 

@@ -65,10 +65,10 @@ export class PaymentPage extends React.Component<FormComponentProps, PaymentPage
     );
   }
 
-  private onBillingAddressChange = (billingAddress: Address) => {
+  private onBillingAddressChange = (billingAddress: Address, callback: () => void) => {
     this.setState({
       billingAddress,
-    });
+    }, callback);
   }
 
   private onPay = (event: React.FormEvent<HTMLFormElement>) => {

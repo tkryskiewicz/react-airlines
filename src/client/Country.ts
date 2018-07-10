@@ -14,6 +14,8 @@ export class Country {
   constructor(
     public code: CountryCode,
     public name: string,
+    public hasPostalCodes: boolean = false,
+    public isPostalCodeRequired: boolean = false,
     public regionType?: RegionType,
     public regions: CountryRegion[] = [],
   ) {

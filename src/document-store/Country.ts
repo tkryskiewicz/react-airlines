@@ -7,6 +7,8 @@ export class Country {
   constructor(
     public code: string,
     public name: string,
+    public hasPostalCodes: boolean = false,
+    public isPostalCodeRequired: boolean = false,
     public regionType?: string,
     public regions: Region[] = [],
   ) {
