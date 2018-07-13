@@ -9,6 +9,7 @@ import { Route } from "../Route";
 export interface RouteSelectorProps extends FormComponentProps {
   airports: Airport[];
   isRequired?: boolean;
+  isDisabled?: boolean;
   value: Route;
   onChange?: (value: Route) => void;
 }
@@ -33,7 +34,9 @@ export class RouteSelector extends React.Component<RouteSelectorProps> {
             ],
           })(
             <Select
+              style={{ width: "100%" }}
               placeholder="Select origin"
+              disabled={this.props.isDisabled}
               onChange={this.onOriginChange}
             >
               {this.props.airports.map(this.mapAirportToOption)}
@@ -50,7 +53,9 @@ export class RouteSelector extends React.Component<RouteSelectorProps> {
             ],
           })(
             <Select
+              style={{ width: "100%" }}
               placeholder="Select destination"
+              disabled={this.props.isDisabled}
               onChange={this.onDestinationChange}
             >
               {destinations.map(this.mapAirportToOption)}
