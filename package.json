@@ -98,6 +98,6 @@
     "start": "webpack-dev-server",
     "start:server": "ts-node -r tsconfig-paths/register src/server",
     "clean": "rimraf dist",
-    "storybook": "ts-node node_modules/.bin/start-storybook -p 9001 -c .storybook"
+    "storybook": "ts-node node_modules/.bin/start-storybook -p 9001 -c storybook"
   }
 }
