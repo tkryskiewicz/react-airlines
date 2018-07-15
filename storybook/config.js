@@ -18,13 +18,13 @@ addLocaleData([
 import { setIntlConfig, withIntl } from "storybook-addon-intl";
 
 setIntlConfig({
+  defaultLocale: "en",
+  getMessages: () => ({}),
   locales: [
     "en",
     "pl",
   ],
-  defaultLocale: "en",
-  getMessages: () => ({}),
-})
+});
 
 addDecorator(withIntl);
 
@@ -32,7 +32,7 @@ import { withAntdLocale } from "./withAntdLocale";
 
 addDecorator(withAntdLocale);
 
-const req = require.context("../src", true, /\.story\.tsx$/)
+const req = require.context("../src", true, /\.story\.tsx$/);
 
 configure(() => {
   req.keys().forEach(req);

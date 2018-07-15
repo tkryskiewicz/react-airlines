@@ -19,7 +19,8 @@
     "no-submodule-imports": [
       true,
       "antd",
-      "react-intl"
+      "react-intl",
+      "storybook-addon-intl"
     ],
     "no-var-requires": false,
     "variable-name": [
