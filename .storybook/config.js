@@ -5,6 +5,19 @@ import "antd/dist/antd.css";
 
 addDecorator(withKnobs);
 
+import { setIntlConfig, withIntl } from "storybook-addon-intl";
+
+setIntlConfig({
+  locales: [
+    "en",
+    "pl",
+  ],
+  defaultLocale: "en",
+  getMessages: () => ({}),
+})
+
+addDecorator(withIntl);
+
 const req = require.context("../src", true, /\.story\.tsx$/)
 
 configure(() => {
