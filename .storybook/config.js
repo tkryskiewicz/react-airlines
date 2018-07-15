@@ -5,6 +5,16 @@ import "antd/dist/antd.css";
 
 addDecorator(withKnobs);
 
+import { addLocaleData } from "react-intl";
+
+import enLocaleData from "react-intl/locale-data/en";
+import plLocaleData from "react-intl/locale-data/pl";
+
+addLocaleData([
+  ...enLocaleData,
+  ...plLocaleData,
+]);
+
 import { setIntlConfig, withIntl } from "storybook-addon-intl";
 
 setIntlConfig({
@@ -17,6 +27,10 @@ setIntlConfig({
 })
 
 addDecorator(withIntl);
+
+import { withAntdLocale } from "./withAntdLocale";
+
+addDecorator(withAntdLocale);
 
 const req = require.context("../src", true, /\.story\.tsx$/)
 

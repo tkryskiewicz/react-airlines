@@ -16,7 +16,7 @@ const config: Webpack.Configuration = {
         options: {
           configFileName: "tsconfig-build.json",
         },
-        test: /\.tsx?$/,
+        test: /\.(tsx?|jsx)$/,
       },
       {
         test: /\.css$/,
@@ -39,6 +39,7 @@ const config: Webpack.Configuration = {
     extensions: [
       ".tsx",
       ".ts",
+      ".jsx",
       ".js",
     ],
     plugins: [
