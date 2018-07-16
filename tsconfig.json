@@ -16,6 +16,9 @@
       "@storybook/*": [
         "types/@storybook/*"
       ],
+      "storybook-addon-intl": [
+        "types/storybook-addon-intl"
+      ],
       "storybook-addon-intl/*": [
         "types/storybook-addon-intl/*"
       ],
