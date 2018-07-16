@@ -6,9 +6,12 @@ import { Address } from "../Address";
 import { AddressForm } from "../AddressForm";
 import { Country } from "../Country";
 import { CountryService } from "../CountryService";
+import { PaymentCard } from "../PaymentCard";
+import { PaymentCardForm } from "../PaymentCardForm";
 
 interface PaymentPageState {
   countries: Country[];
+  paymentCard: PaymentCard;
   billingAddress: Address;
 }
 
@@ -21,6 +24,7 @@ export class PaymentPage extends React.Component<FormComponentProps, PaymentPage
     this.state = {
       billingAddress: new Address(),
       countries: [],
+      paymentCard: new PaymentCard(),
     };
   }
 
@@ -45,6 +49,15 @@ export class PaymentPage extends React.Component<FormComponentProps, PaymentPage
           Payment page
         </h1>
         <Form onSubmit={this.onPay}>
+          <PaymentCardForm
+            form={this.props.form}
+            required={true}
+            value={this.state.paymentCard}
+            onChange={this.onPaymentCardChange}
+          />
+          <h2>
+            Billing address
+          </h2>
           <AddressForm
             form={this.props.form}
             countries={this.state.countries}
@@ -63,6 +76,12 @@ export class PaymentPage extends React.Component<FormComponentProps, PaymentPage
         </Form>
       </>
     );
+  }
+
+  private onPaymentCardChange = (paymentCard: PaymentCard) => {
+    this.setState({
+      paymentCard,
+    });
   }
 
   private onBillingAddressChange = (billingAddress: Address, callback: () => void) => {
