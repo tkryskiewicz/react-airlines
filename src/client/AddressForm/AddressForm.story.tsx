@@ -1,4 +1,5 @@
 import { action } from "@storybook/addon-actions";
+import { boolean } from "@storybook/addon-knobs";
 import { storiesOf } from "@storybook/react";
 import { Button, Form } from "antd";
 import * as React from "react";
@@ -30,8 +31,8 @@ storiesOf("AddressForm", module)
   .add("default", () => (
     <AddressFormWrapped
       countries={[]}
-      required={true}
-      onChange={action("onChange")}
+      required={boolean("Required", true)}
       value={new Address()}
+      onChange={action("onChange")}
     />
   ));

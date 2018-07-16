@@ -43,6 +43,10 @@ export const addressFormMessages = defineMessages({
     defaultMessage: "Country",
     id: "addressForm.country.label",
   },
+  countryNoData: {
+    defaultMessage: "No countries",
+    id: "addressForm.country.noData",
+  },
   countryPlaceholder: {
     defaultMessage: "Select country",
     id: "addressForm.country.placeholder",
@@ -67,6 +71,10 @@ export const addressFormMessages = defineMessages({
     defaultMessage: "Province",
     id: "addressForm.region.province.label",
   },
+  provinceNoData: {
+    defaultMessage: "No provinces",
+    id: "addressForm.region.province.noData",
+  },
   provincePlaceholder: {
     defaultMessage: "Select province",
     id: "addressForm.region.province.placeholder",
@@ -79,6 +87,10 @@ export const addressFormMessages = defineMessages({
     defaultMessage: "Region",
     id: "addressForm.region.label",
   },
+  regionNoData: {
+    defaultMessage: "No regions",
+    id: "addressForm.region.noData",
+  },
   regionPlaceholder: {
     defaultMessage: "Select region",
     id: "addressForm.region.placeholder",
@@ -90,6 +102,10 @@ export const addressFormMessages = defineMessages({
   stateLabel: {
     defaultMessage: "State",
     id: "addressForm.region.state.label",
+  },
+  stateNoData: {
+    defaultMessage: "No states",
+    id: "addressForm.region.state.noData",
   },
   statePlaceholder: {
     defaultMessage: "Select state",

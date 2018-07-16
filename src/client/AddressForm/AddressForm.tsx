@@ -69,6 +69,7 @@ export class AddressForm extends React.Component<AddressFormProps & InjectedIntl
             <Select
               style={{ width: "100%" }}
               placeholder={<FormattedMessage {...addressFormMessages.countryPlaceholder} />}
+              notFoundContent={<FormattedMessage {...addressFormMessages.countryNoData} />}
               onChange={this.onCountryChange}
             >
               {this.props.countries.map(this.renderCountry)}
@@ -113,6 +114,7 @@ export class AddressForm extends React.Component<AddressFormProps & InjectedIntl
     let messages = {
       emptyError: addressFormMessages.regionEmptyError,
       label: addressFormMessages.regionLabel,
+      noData: addressFormMessages.regionNoData,
       placeholder: addressFormMessages.regionPlaceholder,
     };
 
@@ -121,6 +123,7 @@ export class AddressForm extends React.Component<AddressFormProps & InjectedIntl
         messages = {
           emptyError: addressFormMessages.stateEmptyError,
           label: addressFormMessages.stateLabel,
+          noData: addressFormMessages.stateNoData,
           placeholder: addressFormMessages.statePlaceholder,
         };
         break;
@@ -128,6 +131,7 @@ export class AddressForm extends React.Component<AddressFormProps & InjectedIntl
         messages = {
           emptyError: addressFormMessages.provinceEmptyError,
           label: addressFormMessages.provinceLabel,
+          noData: addressFormMessages.provinceNoData,
           placeholder: addressFormMessages.provincePlaceholder,
         };
         break;
@@ -143,6 +147,7 @@ export class AddressForm extends React.Component<AddressFormProps & InjectedIntl
           <Select
             style={{ width: "100%" }}
             placeholder={<FormattedMessage {...messages.placeholder} />}
+            notFoundContent={<FormattedMessage {...messages.noData} />}
             onChange={this.onRegionChange}
           >
             {country.regions.map(this.renderRegion)}
