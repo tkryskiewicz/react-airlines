@@ -6,9 +6,13 @@ import * as React from "react";
 import { FormattedMessage, InjectedIntlProps, injectIntl } from "react-intl";
 
 import { PaymentCard } from "../PaymentCard";
+import { PaymentCardType, SecurityCodeType } from "../PaymentCardType";
 import { paymentCardFormMessages } from "./messages";
 
+const DefaultCardType = new PaymentCardType("", "", SecurityCodeType.CVV, 3);
+
 export interface PaymentCardFormProps extends FormComponentProps {
+  cardTypes: PaymentCardType[];
   required?: boolean;
   disabled?: boolean;
   value: PaymentCard;
@@ -19,6 +23,8 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
   public render() {
     const { getFieldDecorator } = this.props.form;
     const { formatMessage } = this.props.intl;
+
+    const cardType = this.props.cardTypes.find((ct) => ct.code === this.props.value.cardType) || DefaultCardType;
 
     return (
       <>
@@ -48,7 +54,9 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
               notFoundContent={<FormattedMessage {...paymentCardFormMessages.cardTypeNoData} />}
               disabled={this.props.disabled}
               onChange={this.onCardTypeChange}
-            />,
+            >
+              {this.props.cardTypes.map(this.renderCardType)}
+            </Select>,
           )}
         </Form.Item>
         <Form.Item label={<FormattedMessage {...paymentCardFormMessages.expiryDateLabel} />}>
@@ -67,12 +75,20 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
         <Form.Item label={<FormattedMessage {...paymentCardFormMessages.securityCodeLabel} />}>
           {getFieldDecorator("securityCode", {
             rules: [
-              { required: this.props.required, message: formatMessage(paymentCardFormMessages.securityCodeEmptyError) },
+              {
+                message: formatMessage(paymentCardFormMessages.securityCodeEmptyError),
+                required: this.props.required,
+              },
+              {
+                len: cardType.securityCodeLength,
+                message: formatMessage(paymentCardFormMessages.securityCodeLengthError, { length: cardType.securityCodeLength }),
+              },
             ],
           })(
             <Input
               name="securityCode"
-              placeholder={formatMessage(paymentCardFormMessages.securityCodePlaceholder)}
+              placeholder={cardType.securityCodeType.toUpperCase()}
+              maxLength={cardType.securityCodeLength}
               disabled={this.props.disabled}
               onChange={this.onInputChange}
             />,
@@ -106,6 +122,14 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
     value[event.target.name] = event.target.value;
 
     this.props.onChange(value);
+  }
+
+  private renderCardType(cardType: PaymentCardType) {
+    return (
+      <Select.Option key={cardType.code} value={cardType.code}>
+        {cardType.name}
+      </Select.Option>
+    );
   }
 
   private onCardTypeChange = (v: SelectValue) => {

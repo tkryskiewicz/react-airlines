@@ -63,6 +63,10 @@ export const paymentCardFormMessages = defineMessages({
     defaultMessage: "Security code",
     id: "paymentCardForm.securityCode.label",
   },
+  securityCodeLengthError: {
+    defaultMessage: "Security code must be {length, number} characters long",
+    id: "paymentCardForm.securityCode.error.length",
+  },
   securityCodePlaceholder: {
     defaultMessage: "CVV",
     id: "paymentCardForm.securityCode.placeholder",

@@ -8,9 +8,11 @@ import { Country } from "../Country";
 import { CountryService } from "../CountryService";
 import { PaymentCard } from "../PaymentCard";
 import { PaymentCardForm } from "../PaymentCardForm";
+import { PaymentCardType } from "../PaymentCardType";
 
 interface PaymentPageState {
   countries: Country[];
+  paymentCardTypes: PaymentCardType[];
   paymentCard: PaymentCard;
   billingAddress: Address;
 }
@@ -25,6 +27,7 @@ export class PaymentPage extends React.Component<FormComponentProps, PaymentPage
       billingAddress: new Address(),
       countries: [],
       paymentCard: new PaymentCard(),
+      paymentCardTypes: [],
     };
   }
 
@@ -51,6 +54,7 @@ export class PaymentPage extends React.Component<FormComponentProps, PaymentPage
         <Form onSubmit={this.onPay}>
           <PaymentCardForm
             form={this.props.form}
+            cardTypes={this.state.paymentCardTypes}
             required={true}
             value={this.state.paymentCard}
             onChange={this.onPaymentCardChange}
