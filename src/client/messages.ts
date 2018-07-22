@@ -5,4 +5,8 @@ export const messages = defineMessages({
     defaultMessage: "This field is required",
     id: "error.empty",
   },
+  lengthError: {
+    defaultMessage: "Must be {length, number} characters long",
+    id: "error.length",
+  },
 });

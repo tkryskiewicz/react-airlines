@@ -11,6 +11,10 @@ export const paymentCardFormMessages = defineMessages({
     defaultMessage: "Card number",
     id: "paymentCardForm.cardNumber.label",
   },
+  cardNumberLengthError: {
+    ...messages.lengthError,
+    id: "paymentCardForm.cardNumber.error.length",
+  },
   cardNumberPlaceholder: {
     defaultMessage: "Enter card number",
     id: "paymentCardForm.cardNumber.placeholder",
@@ -64,7 +68,7 @@ export const paymentCardFormMessages = defineMessages({
     id: "paymentCardForm.securityCode.label",
   },
   securityCodeLengthError: {
-    defaultMessage: "Security code must be {length, number} characters long",
+    ...messages.lengthError,
     id: "paymentCardForm.securityCode.error.length",
   },
   securityCodePlaceholder: {

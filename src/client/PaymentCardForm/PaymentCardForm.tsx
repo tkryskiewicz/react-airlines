@@ -9,7 +9,7 @@ import { PaymentCard } from "../PaymentCard";
 import { PaymentCardType, SecurityCodeType } from "../PaymentCardType";
 import { paymentCardFormMessages } from "./messages";
 
-const DefaultCardType = new PaymentCardType("", "", SecurityCodeType.CVV, 3);
+const DefaultCardType = new PaymentCardType("", "", 16, SecurityCodeType.CVV, 3);
 
 export interface PaymentCardFormProps extends FormComponentProps {
   cardTypes: PaymentCardType[];
@@ -31,7 +31,14 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
         <Form.Item label={<FormattedMessage {...paymentCardFormMessages.cardNumberLabel} />}>
           {getFieldDecorator("cardNumber", {
             rules: [
-              { required: this.props.required, message: formatMessage(paymentCardFormMessages.cardNumberEmptyError) },
+              {
+                message: formatMessage(paymentCardFormMessages.cardNumberEmptyError),
+                required: this.props.required,
+              },
+              {
+                len: cardType.cardNumberLength,
+                message: formatMessage(paymentCardFormMessages.cardNumberLengthError, { length: cardType.cardNumberLength }),
+              },
             ],
           })(
             <Input
@@ -103,6 +110,7 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
             <Input
               name="cardholdersName"
               placeholder={formatMessage(paymentCardFormMessages.cardholdersNamePlaceholder)}
+              maxLength={50}
               disabled={this.props.disabled}
               onChange={this.onInputChange}
             />,

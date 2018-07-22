@@ -7,6 +7,7 @@ export class PaymentCardType {
   constructor(
     public readonly code: string,
     public readonly name: string,
+    public readonly cardNumberLength: number,
     public readonly securityCodeType: SecurityCodeType,
     public readonly securityCodeLength: number,
   ) {
@@ -14,6 +15,6 @@ export class PaymentCardType {
 }
 
 export const PaymentCardTypes = [
-  new PaymentCardType("AX", "American Express", SecurityCodeType.CID, 4),
-  new PaymentCardType("MC", "MasterCard", SecurityCodeType.CVV, 3),
+  new PaymentCardType("AX", "American Express", 15, SecurityCodeType.CID, 4),
+  new PaymentCardType("MC", "MasterCard", 16, SecurityCodeType.CVV, 3),
 ];
