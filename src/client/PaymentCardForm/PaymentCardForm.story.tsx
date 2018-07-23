@@ -16,7 +16,7 @@ storiesOf("PaymentCardForm", module)
       cardTypes={PaymentCardTypes}
       required={boolean("Required", true)}
       disabled={boolean("Disabled", false)}
-      value={new PaymentCard("", "AX")}
+      value={new PaymentCard()}
       onChange={action("onChange")}
     />
   ));

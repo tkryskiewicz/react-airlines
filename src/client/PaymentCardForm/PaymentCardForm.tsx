@@ -10,6 +10,7 @@ import { PaymentCardType, SecurityCodeType } from "../PaymentCardType";
 import { paymentCardFormMessages } from "./messages";
 
 const DefaultCardType = new PaymentCardType("", "", 16, SecurityCodeType.CVV, 3);
+const MaxExpiryDateYears = 20;
 
 export interface PaymentCardFormProps extends FormComponentProps {
   cardTypes: PaymentCardType[];
@@ -75,6 +76,7 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
             <DatePicker.MonthPicker
               placeholder={formatMessage(paymentCardFormMessages.expiryDatePlaceholder)}
               disabled={this.props.disabled}
+              disabledDate={this.disableExpiryDate}
               onChange={this.onExpiryDateChange}
             />,
           )}
@@ -152,6 +154,14 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
     this.props.onChange(value);
   }
 
+  private disableExpiryDate = (current: Moment.Moment) => {
+    return current && (current.isBefore(Moment(), "M") || current.isSameOrAfter(this.getMaxExpiryDate(), "M"));
+  }
+
+  private getMaxExpiryDate() {
+    return Moment().add(MaxExpiryDateYears, "y");
+  }
+
   private onExpiryDateChange = (date: Moment.Moment) => {
     if (!this.props.onChange) {
       return;
@@ -159,7 +169,7 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
 
     const value = this.props.value.clone();
 
-    value.expiryDate = date;
+    value.expiryDate = date.startOf("M");
 
     this.props.onChange(value);
   }
