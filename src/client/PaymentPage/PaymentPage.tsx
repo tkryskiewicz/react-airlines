@@ -3,11 +3,12 @@ import { FormComponentProps } from "antd/lib/form";
 import * as React from "react";
 
 import { PaymentCard, PaymentCardForm, PaymentCardType } from "ra-payment";
-import { Address, AddressForm, Country } from "ra-shared";
+import { Address, AddressForm, Country, HonorificTitles, PassengerName, PassengerNameForm } from "ra-shared";
 
 import { CountryService } from "../CountryService";
 
 interface PaymentPageState {
+  passengerName: PassengerName;
   countries: Country[];
   paymentCardTypes: PaymentCardType[];
   paymentCard: PaymentCard;
@@ -23,6 +24,7 @@ export class PaymentPage extends React.Component<FormComponentProps, PaymentPage
     this.state = {
       billingAddress: new Address(),
       countries: [],
+      passengerName: new PassengerName(),
       paymentCard: new PaymentCard(),
       paymentCardTypes: [],
     };
@@ -49,6 +51,19 @@ export class PaymentPage extends React.Component<FormComponentProps, PaymentPage
           Payment page
         </h1>
         <Form onSubmit={this.onPay}>
+          <h2>
+            Passenger details
+          </h2>
+          <PassengerNameForm
+            form={this.props.form}
+            titles={HonorificTitles}
+            required={true}
+            value={this.state.passengerName}
+            onChange={this.onPassengerNameChange}
+          />
+          <h2>
+            Payment method
+          </h2>
           <PaymentCardForm
             form={this.props.form}
             cardTypes={this.state.paymentCardTypes}
@@ -77,6 +92,12 @@ export class PaymentPage extends React.Component<FormComponentProps, PaymentPage
         </Form>
       </>
     );
+  }
+
+  private onPassengerNameChange = (passengerName: PassengerName) => {
+    this.setState({
+      passengerName,
+    });
   }
 
   private onPaymentCardChange = (paymentCard: PaymentCard) => {
