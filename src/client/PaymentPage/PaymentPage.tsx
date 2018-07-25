@@ -2,13 +2,10 @@ import { Button, Form, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import * as React from "react";
 
-import { Address } from "../Address";
-import { AddressForm } from "../AddressForm";
-import { Country } from "../Country";
+import { PaymentCard, PaymentCardForm, PaymentCardType } from "ra-payment";
+import { Address, AddressForm, Country } from "ra-shared";
+
 import { CountryService } from "../CountryService";
-import { PaymentCard } from "../PaymentCard";
-import { PaymentCardForm } from "../PaymentCardForm";
-import { PaymentCardType } from "../PaymentCardType";
 
 interface PaymentPageState {
   countries: Country[];

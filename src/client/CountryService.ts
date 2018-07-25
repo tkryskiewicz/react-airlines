@@ -1,7 +1,7 @@
 import { CountryData, getCountriesUrl } from "ra-api";
 
-import { Country, PostalCodeType, RegionType } from "./Country";
-import { ServiceBase } from "./ServiceBase";
+import { ServiceBase } from "ra-core";
+import { Country, PostalCodeType, RegionType } from "ra-shared";
 
 export class CountryService extends ServiceBase {
   public async getAll() {

@@ -3,14 +3,15 @@ import { boolean } from "@storybook/addon-knobs";
 import { storiesOf } from "@storybook/react";
 import * as React from "react";
 
+import { withForm } from "ra-core";
+
 import { PaymentCard } from "../PaymentCard";
 import { PaymentCardTypes } from "../PaymentCardType";
-import { withForm } from "../withForm";
 import { PaymentCardFormWrapped as PaymentCardForm } from "./PaymentCardForm";
 
 const PaymentCardFormWrapped = withForm(PaymentCardForm);
 
-storiesOf("PaymentCardForm", module)
+storiesOf("payment/PaymentCardForm", module)
   .add("default", () => (
     <PaymentCardFormWrapped
       cardTypes={PaymentCardTypes}

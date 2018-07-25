@@ -4,8 +4,9 @@ import { SelectValue } from "antd/lib/select";
 import * as React from "react";
 import { FormattedMessage, InjectedIntlProps, injectIntl } from "react-intl";
 
+import { messages } from "ra-shared";
+
 import { Airport } from "../Airport";
-import { messages } from "../messages";
 import { Route } from "../Route";
 import { routeSelectorMessages } from "./messages";
 

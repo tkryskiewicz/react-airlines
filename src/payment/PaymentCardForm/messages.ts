@@ -1,6 +1,6 @@
 import { defineMessages } from "react-intl";
 
-import { messages } from "../messages";
+import { messages } from "ra-shared";
 
 export const paymentCardFormMessages = defineMessages({
   cardNumberEmptyError: {

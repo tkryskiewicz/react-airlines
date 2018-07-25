@@ -3,9 +3,10 @@ import { boolean } from "@storybook/addon-knobs";
 import { storiesOf } from "@storybook/react";
 import * as React from "react";
 
+import { withForm } from "ra-core";
+
 import { Airport } from "../Airport";
 import { Route } from "../Route";
-import { withForm } from "../withForm";
 import { RouteSelectorWrapped as RouteSelector } from "./RouteSelector";
 
 const RouteSelectorWrapped = withForm(RouteSelector);
