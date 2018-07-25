@@ -2,7 +2,7 @@ import { Button, Form, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import * as React from "react";
 
-import { PaymentCard, PaymentCardForm, PaymentCardType } from "ra-payment";
+import { PaymentCard, PaymentCardForm, PaymentCardService, PaymentCardType } from "ra-payment";
 import { Address, AddressForm, Country, HonorificTitles, PassengerName, PassengerNameForm } from "ra-shared";
 
 import { CountryService } from "../CountryService";
@@ -17,6 +17,7 @@ interface PaymentPageState {
 
 export class PaymentPage extends React.Component<FormComponentProps, PaymentPageState> {
   private countryService = new CountryService();
+  private paymentCardService = new PaymentCardService();
 
   constructor(props: FormComponentProps) {
     super(props);
@@ -32,12 +33,17 @@ export class PaymentPage extends React.Component<FormComponentProps, PaymentPage
 
   public async componentDidMount() {
     try {
-      const countries = await this.countryService.getAll();
+      const [countries, paymentCardTypes] = await Promise.all([
+        this.countryService.getAll(),
+        this.paymentCardService.getAllCardTypes(),
+      ]);
 
       countries.sort((a, b) => a.name.localeCompare(b.name));
+      paymentCardTypes.sort((a, b) => a.name.localeCompare(b.name));
 
       this.setState({
         countries,
+        paymentCardTypes,
       });
     } catch (error) {
       message.error(`Loading resources failed - ${error}`);
@@ -100,10 +106,10 @@ export class PaymentPage extends React.Component<FormComponentProps, PaymentPage
     });
   }
 
-  private onPaymentCardChange = (paymentCard: PaymentCard) => {
+  private onPaymentCardChange = (paymentCard: PaymentCard, callback: () => void) => {
     this.setState({
       paymentCard,
-    });
+    }, callback);
   }
 
   private onBillingAddressChange = (billingAddress: Address, callback: () => void) => {

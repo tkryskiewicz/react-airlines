@@ -1,5 +1,4 @@
 import { AirportData, getAirportsUrl } from "ra-api";
-
 import { ServiceBase } from "ra-core";
 
 import { Airport } from "./Airport";

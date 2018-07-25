@@ -6,7 +6,6 @@ import * as React from "react";
 import { withForm } from "ra-core";
 
 import { PaymentCard } from "../PaymentCard";
-import { PaymentCardTypes } from "../PaymentCardType";
 import { PaymentCardFormWrapped as PaymentCardForm } from "./PaymentCardForm";
 
 const PaymentCardFormWrapped = withForm(PaymentCardForm);
@@ -14,7 +13,7 @@ const PaymentCardFormWrapped = withForm(PaymentCardForm);
 storiesOf("payment/PaymentCardForm", module)
   .add("default", () => (
     <PaymentCardFormWrapped
-      cardTypes={PaymentCardTypes}
+      cardTypes={[]}
       required={boolean("Required", true)}
       disabled={boolean("Disabled", false)}
       value={new PaymentCard()}

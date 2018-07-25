@@ -17,7 +17,7 @@ export interface PaymentCardFormProps extends FormComponentProps {
   required?: boolean;
   disabled?: boolean;
   value: PaymentCard;
-  onChange?: (value: PaymentCard) => void;
+  onChange?: (value: PaymentCard, callback: () => void) => void;
 }
 
 export class PaymentCardForm extends React.Component<PaymentCardFormProps & InjectedIntlProps> {
@@ -135,7 +135,7 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
 
     value[event.target.name] = event.target.value;
 
-    this.props.onChange(value);
+    this.props.onChange(value, () => undefined);
   }
 
   private validateCardNumber = (rule: ValidationRule, value: string, callback: (errors?: string[]) => void) => {
@@ -167,7 +167,9 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
 
     value.cardType = v.toString();
 
-    this.props.onChange(value);
+    this.props.onChange(value, () => {
+      this.props.form.validateFields(["cardNumber", "securityCode"], { force: true }, () => undefined);
+    });
   }
 
   private disableExpiryDate = (current: Moment.Moment) => {
@@ -187,7 +189,7 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
 
     value.expiryDate = date.startOf("M");
 
-    this.props.onChange(value);
+    this.props.onChange(value, () => undefined);
   }
 }
 

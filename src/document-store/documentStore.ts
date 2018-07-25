@@ -4,6 +4,7 @@ import { DocumentStore, IDocumentStore } from "ravendb";
 import { Airport } from "./Airport";
 import { Country } from "./Country";
 import { Flight } from "./Flight";
+import { PaymentCardType } from "./PaymentCardType";
 
 export const createDocumentStore = (url: string, database: string) => {
   const documentStore = new DocumentStore(url, database);
@@ -15,7 +16,10 @@ export const createDocumentStore = (url: string, database: string) => {
     .registerEntityType(Airport)
     .registerIdConvention<Airport>(Airport, async (_database, entity: object) =>
       `${documentStore.conventions.getCollectionNameForType(Airport)}/${(entity as Airport).code}`)
-    .registerEntityType(Flight);
+    .registerEntityType(Flight)
+    .registerEntityType(PaymentCardType)
+    .registerIdConvention<PaymentCardType>(PaymentCardType, async (_database, entity: object) =>
+      `${documentStore.conventions.getCollectionNameForType(PaymentCardType)}/${(entity as PaymentCardType).code}`);
 
   return documentStore;
 };
@@ -146,6 +150,17 @@ export const initializeDocumentStore = async (documentStore: IDocumentStore) => 
 
   await Promise.all(flights.map(async (f) => {
     await documentSession.store(f);
+
+    await documentSession.saveChanges();
+  }));
+
+  const paymentCardTypes = [
+    new PaymentCardType("AX", "American Express", 15, "^3[0-9]{14}$", "cid", 4),
+    new PaymentCardType("MC", "MasterCard", 16, "^[2,5][0-9]{15}$", "cvv", 3),
+  ];
+
+  await Promise.all(paymentCardTypes.map(async (ct) => {
+    await documentSession.store(ct);
 
     await documentSession.saveChanges();
   }));
