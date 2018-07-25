@@ -8,7 +8,12 @@ export const registerPaymentCardsApi = (app: Express.Express) => {
     const documents = await req.documentSession.query<PaymentCardType>(PaymentCardType).all();
 
     const cardTypes: PaymentCardTypeData[] = documents.map((d): PaymentCardTypeData => ({
-      ...d,
+      cardNumberLength: d.cardNumberLength,
+      cardNumberPattern: d.cardNumberPattern,
+      code: d.code,
+      name: d.name,
+      securityCodeLength: d.securityCodeLength,
+      securityCodeType: d.securityCodeType,
     }));
 
     res.send(cardTypes);
