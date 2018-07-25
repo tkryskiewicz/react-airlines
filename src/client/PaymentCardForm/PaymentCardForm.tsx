@@ -1,5 +1,5 @@
 import { DatePicker, Form, Input, Select } from "antd";
-import { FormComponentProps } from "antd/lib/form";
+import { FormComponentProps, ValidationRule } from "antd/lib/form";
 import { SelectValue } from "antd/lib/select";
 import * as Moment from "moment";
 import * as React from "react";
@@ -9,7 +9,7 @@ import { PaymentCard } from "../PaymentCard";
 import { PaymentCardType, SecurityCodeType } from "../PaymentCardType";
 import { paymentCardFormMessages } from "./messages";
 
-const DefaultCardType = new PaymentCardType("", "", 16, SecurityCodeType.CVV, 3);
+const DefaultCardType = new PaymentCardType("", "", 16, /^[0-9]+$/, SecurityCodeType.CVV, 3);
 const MaxExpiryDateYears = 20;
 
 export interface PaymentCardFormProps extends FormComponentProps {
@@ -40,12 +40,16 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
                 len: cardType.cardNumberLength,
                 message: formatMessage(paymentCardFormMessages.cardNumberLengthError, { length: cardType.cardNumberLength }),
               },
+              {
+                message: formatMessage(paymentCardFormMessages.cardNumberPatternError),
+                validator: this.validateCardNumber,
+              },
             ],
           })(
             <Input
               name="cardNumber"
               placeholder={formatMessage(paymentCardFormMessages.cardNumberPlaceholder)}
-              maxLength={20}
+              maxLength={cardType.cardNumberLength}
               disabled={this.props.disabled}
               onChange={this.onInputChange}
             />,
@@ -132,6 +136,18 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
     value[event.target.name] = event.target.value;
 
     this.props.onChange(value);
+  }
+
+  private validateCardNumber = (rule: ValidationRule, value: string, callback: (errors?: string[]) => void) => {
+    const errors = [];
+
+    const cardType = this.props.cardTypes.find((ct) => ct.code === this.props.value.cardType);
+
+    if (cardType && !cardType.cardNumberPattern.test(value)) {
+      errors.push(rule.message!);
+    }
+
+    callback(errors);
   }
 
   private renderCardType(cardType: PaymentCardType) {
