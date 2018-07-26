@@ -41,7 +41,6 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
                 message: formatMessage(paymentCardFormMessages.cardNumberLengthError, { length: cardType.cardNumberLength }),
               },
               {
-                message: formatMessage(paymentCardFormMessages.cardNumberPatternError),
                 validator: this.validateCardNumber,
               },
             ],
@@ -138,13 +137,15 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
     this.props.onChange(value, () => undefined);
   }
 
-  private validateCardNumber = (rule: ValidationRule, value: string, callback: (errors?: string[]) => void) => {
+  private validateCardNumber = (_rule: ValidationRule, value: string = "", callback: (errors?: string[]) => void) => {
     const errors = [];
 
     const cardType = this.props.cardTypes.find((ct) => ct.code === this.props.value.cardType);
 
-    if (cardType && !cardType.cardNumberPattern.test(value)) {
-      errors.push(rule.message!);
+    if (cardType && value.length === cardType.cardNumberLength && !cardType.cardNumberPattern.test(value)) {
+      const message = this.props.intl.formatMessage(paymentCardFormMessages.cardNumberPatternError, { name: cardType.name });
+
+      errors.push(message);
     }
 
     callback(errors);

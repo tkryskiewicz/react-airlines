@@ -16,7 +16,7 @@ export const paymentCardFormMessages = defineMessages({
     id: "paymentCardForm.cardNumber.error.length",
   },
   cardNumberPatternError: {
-    defaultMessage: "Not a valid card number",
+    defaultMessage: "Not a valid {name} card number",
     id: "paymentCardForm.cardNumber.error.pattern",
   },
   cardNumberPlaceholder: {
