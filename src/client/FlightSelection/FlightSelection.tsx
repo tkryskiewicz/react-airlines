@@ -3,8 +3,8 @@ import * as Moment from "moment";
 import * as React from "react";
 import { FormattedNumber } from "react-intl";
 
-import { Airport } from "../Airport";
-import { AirportService } from "../AirportService";
+import { Airport, AirportService } from "ra-shared";
+
 import { Flight } from "../Flight";
 import { FlightService } from "../FlightService";
 import { Route } from "../Route";

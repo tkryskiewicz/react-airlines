@@ -1,51 +1,42 @@
-import { Button, DatePicker, Form, message } from "antd";
+import { Button, DatePicker, Form } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import * as Moment from "moment";
 import * as React from "react";
+import { connect } from "react-redux";
 
-import { Airport } from "../Airport";
-import { AirportService } from "../AirportService";
+import { Airport } from "ra-shared";
+import { AppState, loadAirports } from "ra-store";
+
 import { Route } from "../Route";
 import { RouteSelector } from "../RouteSelector";
 import { TimetableService } from "../TimetableService";
 
 export interface FlightSearchProps extends FormComponentProps {
+  airports: Airport[];
+  onInit: () => void;
   onSearch: (route: Route, departureDate: Moment.Moment) => void;
 }
 
 interface FlightSearchState {
-  airports: Airport[];
   route: Route;
   departureDates: Moment.Moment[];
   departureDate?: Moment.Moment;
 }
 
 export class FlightSearch extends React.Component<FlightSearchProps, FlightSearchState> {
-  private airportService = new AirportService();
   private timetableService = new TimetableService();
 
   constructor(props: FlightSearchProps) {
     super(props);
 
     this.state = {
-      airports: [],
       departureDates: [],
       route: new Route(),
     };
   }
 
   public async componentDidMount() {
-    try {
-      const airports = await this.airportService.getAll();
-
-      airports.sort((a, b) => a.name.localeCompare(b.name));
-
-      this.setState({
-        airports,
-      });
-    } catch (error) {
-      message.error(`Loading resources failed - ${error}`);
-    }
+    this.props.onInit();
   }
 
   public render() {
@@ -55,7 +46,7 @@ export class FlightSearch extends React.Component<FlightSearchProps, FlightSearc
       <Form onSubmit={this.onSearch}>
         <RouteSelector
           form={this.props.form}
-          airports={this.state.airports}
+          airports={this.props.airports}
           isRequired={true}
           value={this.state.route}
           onChange={this.onRouteChange}
@@ -145,3 +136,13 @@ export class FlightSearch extends React.Component<FlightSearchProps, FlightSearc
 }
 
 export const FlightSearchWrapped = Form.create()(FlightSearch);
+
+const mapStateToProps = (state: AppState): Pick<FlightSearchProps, "airports"> => ({
+  airports: state.shared.airports,
+});
+
+const mapDispatchToProps = (dispatch: any): Pick<FlightSearchProps, "onInit"> => ({
+  onInit: () => dispatch(loadAirports),
+});
+
+export const FlightSearchConnected = connect(mapStateToProps, mapDispatchToProps)(FlightSearchWrapped);

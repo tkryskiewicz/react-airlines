@@ -1,4 +1,4 @@
-import { AirportCode } from "./Airport";
+import { AirportCode } from "ra-shared";
 
 export class Route {
   constructor(

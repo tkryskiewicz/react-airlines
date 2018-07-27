@@ -1,5 +1,8 @@
 export { Address } from "./Address";
 export { AddressForm } from "./AddressForm";
+export { Airport } from "./Airport";
+export { AirportCode } from "./AirportCode";
+export { AirportService } from "./AirportService";
 export { Price } from "./Price";
 export { Country, CountryCode, PostalCodeType, RegionType } from "./Country";
 export { messages } from "./messages";
