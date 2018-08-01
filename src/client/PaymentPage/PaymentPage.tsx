@@ -1,17 +1,19 @@
-import { Button, Form, message } from "antd";
+import { Button, Form } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import * as React from "react";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 
-import { PaymentCard, PaymentCardForm, PaymentCardService, PaymentCardType } from "ra-payment";
+import { PaymentCard, PaymentCardForm, PaymentCardType } from "ra-payment";
 import { Address, AddressForm, Country, HonorificTitles, PassengerName, PassengerNameForm } from "ra-shared";
 import { AppState } from "ra-store";
 import { BookingAction, changePassengerName, changePayment } from "ra-store/booking";
+import { loadCardTypes } from "ra-store/payments";
 import { loadCountries } from "ra-store/shared";
 
 export interface PaymentPageProps extends FormComponentProps {
   countries: Country[];
+  paymentCardTypes: PaymentCardType[];
   onLoad?: () => void;
   passengerName: PassengerName;
   onPassengerNameChange?: (value: PassengerName) => void;
@@ -20,38 +22,10 @@ export interface PaymentPageProps extends FormComponentProps {
   onPaymentChange?: (paymentCard: PaymentCard, billingAddress: Address) => void;
 }
 
-interface PaymentPageState {
-  paymentCardTypes: PaymentCardType[];
-}
-
-export class PaymentPage extends React.Component<PaymentPageProps, PaymentPageState> {
-  private paymentCardService = new PaymentCardService();
-
-  constructor(props: PaymentPageProps) {
-    super(props);
-
-    this.state = {
-      paymentCardTypes: [],
-    };
-  }
-
+export class PaymentPage extends React.Component<PaymentPageProps> {
   public async componentDidMount() {
     if (this.props.onLoad) {
       this.props.onLoad();
-    }
-
-    try {
-      const [paymentCardTypes] = await Promise.all([
-        this.paymentCardService.getAllCardTypes(),
-      ]);
-
-      paymentCardTypes.sort((a, b) => a.name.localeCompare(b.name));
-
-      this.setState({
-        paymentCardTypes,
-      });
-    } catch (error) {
-      message.error(`Loading resources failed - ${error}`);
     }
   }
 
@@ -77,7 +51,7 @@ export class PaymentPage extends React.Component<PaymentPageProps, PaymentPageSt
           </h2>
           <PaymentCardForm
             form={this.props.form}
-            cardTypes={this.state.paymentCardTypes}
+            cardTypes={this.props.paymentCardTypes}
             required={true}
             value={this.props.paymentCard}
             onChange={this.onPaymentCardChange}
@@ -141,10 +115,11 @@ export class PaymentPage extends React.Component<PaymentPageProps, PaymentPageSt
 
 export const PaymentPageWrapped = Form.create()(PaymentPage);
 
-type StateProp = "countries" | "passengerName" | "paymentCard" | "billingAddress";
+type StateProp = "countries" | "paymentCardTypes" | "passengerName" | "paymentCard" | "billingAddress";
 
 const mapStateToProps = (state: AppState): Pick<PaymentPageProps, StateProp> => {
   const { countries } = state.shared;
+  const { cardTypes } = state.payments;
   const { passengerName, paymentCard, billingAddress } = state.booking;
 
   return {
@@ -152,6 +127,7 @@ const mapStateToProps = (state: AppState): Pick<PaymentPageProps, StateProp> => 
     countries,
     passengerName,
     paymentCard,
+    paymentCardTypes: cardTypes,
   };
 };
 
@@ -159,7 +135,9 @@ type DispatchProp = "onLoad" | "onPassengerNameChange" | "onPaymentChange";
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, {}, BookingAction>): Pick<PaymentPageProps, DispatchProp> => ({
   onLoad: () => {
+    // FIXME: this is not strictly typed, BookingAction is not enforced
     dispatch(loadCountries);
+    dispatch(loadCardTypes);
   },
   onPassengerNameChange: (value) => dispatch(changePassengerName(value)),
   onPaymentChange: (paymentCard, billingAddress) => dispatch(changePayment(paymentCard, billingAddress)),

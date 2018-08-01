@@ -56,9 +56,9 @@ export const loadCountries = async (dispatch: Dispatch<LoadCountriesAction>) => 
 
     const countries = await service.getAll();
 
-    dispatch(loadCountriesSuccess(countries));
+    return dispatch(loadCountriesSuccess(countries));
   } catch (error) {
-    dispatch(loadCountriesFailure(error.toString()));
+    return dispatch(loadCountriesFailure(error.toString()));
   }
 };
 
