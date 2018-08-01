@@ -3,9 +3,11 @@ import { FormComponentProps } from "antd/lib/form";
 import * as Moment from "moment";
 import * as React from "react";
 import { connect } from "react-redux";
+import { ThunkDispatch } from "redux-thunk";
 
 import { Airport } from "ra-shared";
 import { AppState, loadAirports } from "ra-store";
+import { SharedAction } from "ra-store/shared";
 
 import { Route } from "../Route";
 import { RouteSelector } from "../RouteSelector";
@@ -141,7 +143,7 @@ const mapStateToProps = (state: AppState): Pick<FlightSearchProps, "airports"> =
   airports: state.shared.airports,
 });
 
-const mapDispatchToProps = (dispatch: any): Pick<FlightSearchProps, "onInit"> => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, null, SharedAction>): Pick<FlightSearchProps, "onInit"> => ({
   onInit: () => dispatch(loadAirports),
 });
 

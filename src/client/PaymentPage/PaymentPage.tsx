@@ -2,16 +2,17 @@ import { Button, Form, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import * as React from "react";
 import { connect } from "react-redux";
-import { Dispatch } from "redux";
+import { ThunkDispatch } from "redux-thunk";
 
 import { PaymentCard, PaymentCardForm, PaymentCardService, PaymentCardType } from "ra-payment";
 import { Address, AddressForm, Country, HonorificTitles, PassengerName, PassengerNameForm } from "ra-shared";
 import { AppState } from "ra-store";
 import { BookingAction, changePassengerName, changePayment } from "ra-store/booking";
-
-import { CountryService } from "../CountryService";
+import { loadCountries } from "ra-store/shared";
 
 export interface PaymentPageProps extends FormComponentProps {
+  countries: Country[];
+  onLoad?: () => void;
   passengerName: PassengerName;
   onPassengerNameChange?: (value: PassengerName) => void;
   paymentCard: PaymentCard;
@@ -20,35 +21,33 @@ export interface PaymentPageProps extends FormComponentProps {
 }
 
 interface PaymentPageState {
-  countries: Country[];
   paymentCardTypes: PaymentCardType[];
 }
 
 export class PaymentPage extends React.Component<PaymentPageProps, PaymentPageState> {
-  private countryService = new CountryService();
   private paymentCardService = new PaymentCardService();
 
   constructor(props: PaymentPageProps) {
     super(props);
 
     this.state = {
-      countries: [],
       paymentCardTypes: [],
     };
   }
 
   public async componentDidMount() {
+    if (this.props.onLoad) {
+      this.props.onLoad();
+    }
+
     try {
-      const [countries, paymentCardTypes] = await Promise.all([
-        this.countryService.getAll(),
+      const [paymentCardTypes] = await Promise.all([
         this.paymentCardService.getAllCardTypes(),
       ]);
 
-      countries.sort((a, b) => a.name.localeCompare(b.name));
       paymentCardTypes.sort((a, b) => a.name.localeCompare(b.name));
 
       this.setState({
-        countries,
         paymentCardTypes,
       });
     } catch (error) {
@@ -88,7 +87,7 @@ export class PaymentPage extends React.Component<PaymentPageProps, PaymentPageSt
           </h2>
           <AddressForm
             form={this.props.form}
-            countries={this.state.countries}
+            countries={this.props.countries}
             required={true}
             value={this.props.billingAddress}
             onChange={this.onBillingAddressChange}
@@ -142,17 +141,26 @@ export class PaymentPage extends React.Component<PaymentPageProps, PaymentPageSt
 
 export const PaymentPageWrapped = Form.create()(PaymentPage);
 
-const mapStateToProps = (state: AppState): Pick<PaymentPageProps, "passengerName" | "paymentCard" | "billingAddress"> => {
+type StateProp = "countries" | "passengerName" | "paymentCard" | "billingAddress";
+
+const mapStateToProps = (state: AppState): Pick<PaymentPageProps, StateProp> => {
+  const { countries } = state.shared;
   const { passengerName, paymentCard, billingAddress } = state.booking;
 
   return {
     billingAddress,
+    countries,
     passengerName,
     paymentCard,
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<BookingAction>): Pick<PaymentPageProps, "onPassengerNameChange" | "onPaymentChange"> => ({
+type DispatchProp = "onLoad" | "onPassengerNameChange" | "onPaymentChange";
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, {}, BookingAction>): Pick<PaymentPageProps, DispatchProp> => ({
+  onLoad: () => {
+    dispatch(loadCountries);
+  },
   onPassengerNameChange: (value) => dispatch(changePassengerName(value)),
   onPaymentChange: (paymentCard, billingAddress) => dispatch(changePayment(paymentCard, billingAddress)),
 });

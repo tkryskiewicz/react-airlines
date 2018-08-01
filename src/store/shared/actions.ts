@@ -1,12 +1,68 @@
-import { Airport, AirportService } from "ra-shared";
+import { Dispatch } from "redux";
+
+import { Airport, AirportService, Country, CountryService } from "ra-shared";
 
 export enum SharedActionType {
-  LoadAirportsRequest = "loadAirportsRequest",
-  LoadAirportsSuccess = "loadAirportsSuccess",
-  LoadAirportsFailure = "loadAirportsFailure",
+  LoadCountriesRequest = "shared/loadCountriesRequest",
+  LoadCountriesSuccess = "shared/loadCountriesSuccess",
+  LoadCountriesFailure = "shared/loadCountriesFailure",
+  LoadAirportsRequest = "shared/loadAirportsRequest",
+  LoadAirportsSuccess = "shared/loadAirportsSuccess",
+  LoadAirportsFailure = "shared/loadAirportsFailure",
 }
 
 export type SharedAction =
+  LoadCountriesAction |
+  LoadAirportsAction;
+
+type LoadCountriesAction =
+  LoadCountriesRequestAction |
+  LoadCountriesSuccessAction |
+  LoadCountriesFailureAction;
+
+export interface LoadCountriesRequestAction {
+  type: SharedActionType.LoadCountriesRequest;
+}
+
+const loadCountriesRequest = (): LoadCountriesRequestAction => ({
+  type: SharedActionType.LoadCountriesRequest,
+});
+
+export interface LoadCountriesSuccessAction {
+  type: SharedActionType.LoadCountriesSuccess;
+  payload: Country[];
+}
+
+const loadCountriesSuccess = (countries: Country[]): LoadCountriesSuccessAction => ({
+  payload: countries,
+  type: SharedActionType.LoadCountriesSuccess,
+});
+
+export interface LoadCountriesFailureAction {
+  type: SharedActionType.LoadCountriesFailure;
+  error: string;
+}
+
+const loadCountriesFailure = (error: string): LoadCountriesFailureAction => ({
+  error,
+  type: SharedActionType.LoadCountriesFailure,
+});
+
+export const loadCountries = async (dispatch: Dispatch<LoadCountriesAction>) => {
+  dispatch(loadCountriesRequest());
+
+  try {
+    const service = new CountryService();
+
+    const countries = await service.getAll();
+
+    dispatch(loadCountriesSuccess(countries));
+  } catch (error) {
+    dispatch(loadCountriesFailure(error.toString()));
+  }
+};
+
+type LoadAirportsAction =
   LoadAirportsRequestAction |
   LoadAirportsSuccessAction |
   LoadAirportsFailureAction;
@@ -39,7 +95,7 @@ const loadAirportsFailure = (error: string): LoadAirportsFailureAction => ({
   type: SharedActionType.LoadAirportsFailure,
 });
 
-export const loadAirports = async (dispatch: any) => {
+export const loadAirports = async (dispatch: Dispatch<LoadAirportsAction>) => {
   dispatch(loadAirportsRequest());
 
   try {
