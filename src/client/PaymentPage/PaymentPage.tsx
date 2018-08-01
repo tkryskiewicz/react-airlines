@@ -1,32 +1,38 @@
 import { Button, Form, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import * as React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 
 import { PaymentCard, PaymentCardForm, PaymentCardService, PaymentCardType } from "ra-payment";
 import { Address, AddressForm, Country, HonorificTitles, PassengerName, PassengerNameForm } from "ra-shared";
+import { AppState } from "ra-store";
+import { BookingAction, changePassengerName, changePayment } from "ra-store/booking";
 
 import { CountryService } from "../CountryService";
 
-interface PaymentPageState {
+export interface PaymentPageProps extends FormComponentProps {
   passengerName: PassengerName;
-  countries: Country[];
-  paymentCardTypes: PaymentCardType[];
+  onPassengerNameChange?: (value: PassengerName) => void;
   paymentCard: PaymentCard;
   billingAddress: Address;
+  onPaymentChange?: (paymentCard: PaymentCard, billingAddress: Address) => void;
 }
 
-export class PaymentPage extends React.Component<FormComponentProps, PaymentPageState> {
+interface PaymentPageState {
+  countries: Country[];
+  paymentCardTypes: PaymentCardType[];
+}
+
+export class PaymentPage extends React.Component<PaymentPageProps, PaymentPageState> {
   private countryService = new CountryService();
   private paymentCardService = new PaymentCardService();
 
-  constructor(props: FormComponentProps) {
+  constructor(props: PaymentPageProps) {
     super(props);
 
     this.state = {
-      billingAddress: new Address(),
       countries: [],
-      passengerName: new PassengerName(),
-      paymentCard: new PaymentCard(),
       paymentCardTypes: [],
     };
   }
@@ -64,7 +70,7 @@ export class PaymentPage extends React.Component<FormComponentProps, PaymentPage
             form={this.props.form}
             titles={HonorificTitles}
             required={true}
-            value={this.state.passengerName}
+            value={this.props.passengerName}
             onChange={this.onPassengerNameChange}
           />
           <h2>
@@ -74,7 +80,7 @@ export class PaymentPage extends React.Component<FormComponentProps, PaymentPage
             form={this.props.form}
             cardTypes={this.state.paymentCardTypes}
             required={true}
-            value={this.state.paymentCard}
+            value={this.props.paymentCard}
             onChange={this.onPaymentCardChange}
           />
           <h2>
@@ -84,7 +90,7 @@ export class PaymentPage extends React.Component<FormComponentProps, PaymentPage
             form={this.props.form}
             countries={this.state.countries}
             required={true}
-            value={this.state.billingAddress}
+            value={this.props.billingAddress}
             onChange={this.onBillingAddressChange}
           />
           <Form.Item>
@@ -101,21 +107,25 @@ export class PaymentPage extends React.Component<FormComponentProps, PaymentPage
   }
 
   private onPassengerNameChange = (passengerName: PassengerName) => {
-    this.setState({
-      passengerName,
-    });
+    if (this.props.onPassengerNameChange) {
+      this.props.onPassengerNameChange(passengerName);
+    }
   }
 
   private onPaymentCardChange = (paymentCard: PaymentCard, callback: () => void) => {
-    this.setState({
-      paymentCard,
-    }, callback);
+    if (this.props.onPaymentChange) {
+      this.props.onPaymentChange(paymentCard, this.props.billingAddress);
+    }
+
+    callback();
   }
 
   private onBillingAddressChange = (billingAddress: Address, callback: () => void) => {
-    this.setState({
-      billingAddress,
-    }, callback);
+    if (this.props.onPaymentChange) {
+      this.props.onPaymentChange(this.props.paymentCard, billingAddress);
+    }
+
+    callback();
   }
 
   private onPay = (event: React.FormEvent<HTMLFormElement>) => {
@@ -131,3 +141,20 @@ export class PaymentPage extends React.Component<FormComponentProps, PaymentPage
 }
 
 export const PaymentPageWrapped = Form.create()(PaymentPage);
+
+const mapStateToProps = (state: AppState): Pick<PaymentPageProps, "passengerName" | "paymentCard" | "billingAddress"> => {
+  const { passengerName, paymentCard, billingAddress } = state.booking;
+
+  return {
+    billingAddress,
+    passengerName,
+    paymentCard,
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<BookingAction>): Pick<PaymentPageProps, "onPassengerNameChange" | "onPaymentChange"> => ({
+  onPassengerNameChange: (value) => dispatch(changePassengerName(value)),
+  onPaymentChange: (paymentCard, billingAddress) => dispatch(changePayment(paymentCard, billingAddress)),
+});
+
+export const PaymentPageConnected = connect(mapStateToProps, mapDispatchToProps)(PaymentPageWrapped);

@@ -1,1 +1,1 @@
-export { PaymentPageWrapped as PaymentPage } from "./PaymentPage";
+export { PaymentPageConnected as PaymentPage } from "./PaymentPage";

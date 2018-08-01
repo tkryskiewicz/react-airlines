@@ -34,6 +34,7 @@ export class AddressForm extends React.Component<AddressFormProps & InjectedIntl
               name="addressLine1"
               maxLength={50}
               placeholder={formatMessage(addressFormMessages.addressLine1Placeholder)}
+              onChange={this.onInputChange}
             />,
           )}
         </Form.Item>
@@ -43,6 +44,7 @@ export class AddressForm extends React.Component<AddressFormProps & InjectedIntl
               name="addressLine2"
               maxLength={50}
               placeholder={formatMessage(addressFormMessages.addressLine2Placeholder)}
+              onChange={this.onInputChange}
             />,
           )}
         </Form.Item>
@@ -56,6 +58,7 @@ export class AddressForm extends React.Component<AddressFormProps & InjectedIntl
               name="city"
               maxLength={50}
               placeholder={formatMessage(addressFormMessages.cityPlaceholder)}
+              onChange={this.onInputChange}
             />,
           )}
         </Form.Item>
@@ -79,6 +82,18 @@ export class AddressForm extends React.Component<AddressFormProps & InjectedIntl
         {country && country.hasRegions && this.renderRegionSelection(country)}
       </>
     );
+  }
+
+  private onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!this.props.onChange) {
+      return;
+    }
+
+    const value: any = this.props.value.clone();
+
+    value[event.target.name] = event.target.value;
+
+    this.props.onChange(value, () => undefined);
   }
 
   private renderCountry(country: Country) {
@@ -206,13 +221,14 @@ export class AddressForm extends React.Component<AddressFormProps & InjectedIntl
             name="postalCode"
             maxLength={10}
             placeholder={formatMessage(messages.placeholder)}
+            onChange={this.onInputChange}
           />,
         )}
       </Form.Item>
     );
   }
 
-  private revalidatePostalCode() {
+  private revalidatePostalCode = () => {
     // FIXME: we need to re-validate postal code after country change and render
     this.props.form.validateFields(["postalCode"], { force: true }, () => undefined);
   }

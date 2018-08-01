@@ -20,7 +20,8 @@
       true,
       "antd",
       "react-intl",
-      "storybook-addon-intl"
+      "storybook-addon-intl",
+      "ra-store"
     ],
     "no-var-requires": false,
     "variable-name": [
