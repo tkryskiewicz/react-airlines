@@ -2,8 +2,9 @@ import * as Moment from "moment";
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 
+import { Route } from "ra-shared";
+
 import { FlightSearch } from "../FlightSearch";
-import { Route } from "../Route";
 
 export interface HomePageProps extends RouteComponentProps<{ language: string }> {
 }

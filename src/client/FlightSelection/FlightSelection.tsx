@@ -3,22 +3,19 @@ import * as Moment from "moment";
 import * as React from "react";
 import { FormattedNumber } from "react-intl";
 
-import { Airport, AirportService } from "ra-shared";
-
-import { Flight } from "../Flight";
-import { FlightService } from "../FlightService";
-import { Route } from "../Route";
+import { Airport, AirportService, Flight, FlightService, Route } from "ra-shared";
 
 export interface FlightSelectionProps {
   route: Route;
   departureDate: Moment.Moment;
+  selectedFlight?: Flight;
+  onSelectedFlightChange?: (flight: Flight) => void;
 }
 
 interface FlightSelectionState {
   airports: Airport[];
   departureDate: Moment.Moment;
   flights: Flight[];
-  selectedFlight: string;
 }
 
 export class FlightSelection extends React.Component<FlightSelectionProps, FlightSelectionState> {
@@ -32,7 +29,6 @@ export class FlightSelection extends React.Component<FlightSelectionProps, Fligh
       airports: [],
       departureDate: props.departureDate,
       flights: [],
-      selectedFlight: "",
     };
   }
 
@@ -63,7 +59,7 @@ export class FlightSelection extends React.Component<FlightSelectionProps, Fligh
         {this.state.flights.map(this.renderFlight)}
         <Button
           type="primary"
-          disabled={!this.state.selectedFlight}
+          disabled={!this.props.selectedFlight}
           onClick={this.onContinue}
         >
           Continue
@@ -119,7 +115,7 @@ export class FlightSelection extends React.Component<FlightSelectionProps, Fligh
         <Col style={{ textAlign: "center" }} span={6}>
           <Button
             type="default"
-            disabled={this.state.selectedFlight === flight.id}
+            disabled={this.props.selectedFlight && this.props.selectedFlight.id === flight.id}
             onClick={onSelect}
           >
             Select
@@ -130,13 +126,17 @@ export class FlightSelection extends React.Component<FlightSelectionProps, Fligh
   }
 
   private onFlightSelect = (id: string) => {
-    this.setState({
-      selectedFlight: id,
-    });
+    if (!this.props.onSelectedFlightChange) {
+      return;
+    }
+
+    const flight = this.state.flights.find((f) => f.id === id)!;
+
+    this.props.onSelectedFlightChange(flight);
   }
 
   private onContinue = () => {
-    const flight = this.state.flights.find((f) => f.id === this.state.selectedFlight)!;
+    const flight = this.props.selectedFlight!;
 
     // tslint:disable-next-line
     console.log(`Selected flight from ${flight.origin} to ${flight.destination} on ${flight.departureDate.toDate()}`);

@@ -5,9 +5,8 @@ import * as React from "react";
 import { FormattedMessage, InjectedIntlProps, injectIntl } from "react-intl";
 
 import { propOf } from "ra-core";
-import { Airport, messages } from "ra-shared";
+import { Airport, messages, Route } from "ra-shared";
 
-import { Route } from "../Route";
 import { routeSelectorMessages } from "./messages";
 
 export interface RouteSelectorProps extends FormComponentProps {

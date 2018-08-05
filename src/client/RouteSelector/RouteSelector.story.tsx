@@ -4,9 +4,8 @@ import { storiesOf } from "@storybook/react";
 import * as React from "react";
 
 import { withForm } from "ra-core";
-import { Airport } from "ra-shared";
+import { Airport, Route } from "ra-shared";
 
-import { Route } from "../Route";
 import { RouteSelectorWrapped as RouteSelector } from "./RouteSelector";
 
 const RouteSelectorWrapped = withForm(RouteSelector);

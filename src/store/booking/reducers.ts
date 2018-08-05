@@ -13,7 +13,12 @@ const initialState: BookingState = {
 };
 
 export const bookingReducer: Reducer<BookingState, BookingAction> = (state = initialState, action: BookingAction) => {
-  if (action.type === BookingActionType.ChangePassengerName) {
+  if (action.type === BookingActionType.ChangeFlight) {
+    return {
+      ...state,
+      flight: action.payload,
+    };
+  } else if (action.type === BookingActionType.ChangePassengerName) {
     return {
       ...state,
       passengerName: action.payload,

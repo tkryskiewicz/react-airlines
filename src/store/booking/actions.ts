@@ -1,14 +1,26 @@
 import { PaymentCard } from "ra-payment";
-import { Address, PassengerName } from "ra-shared";
+import { Address, Flight, PassengerName } from "ra-shared";
 
 export enum BookingActionType {
+  ChangeFlight = "booking/changeFlight",
   ChangePassengerName = "booking/changePassengerName",
   ChangePayment = "booking/changePayment",
 }
 
 export type BookingAction =
+  ChangeFlightAction |
   ChangePassengerNameAction |
   ChangePaymentAction;
+
+interface ChangeFlightAction {
+  type: BookingActionType.ChangeFlight;
+  payload: Flight;
+}
+
+export const changeFlight = (flight: Flight): ChangeFlightAction => ({
+  payload: flight,
+  type: BookingActionType.ChangeFlight,
+});
 
 interface ChangePassengerNameAction {
   type: BookingActionType.ChangePassengerName;

@@ -1,1 +1,1 @@
-export { FlightSelectionPage } from "./FlightSelectionPage";
+export { FlightSelectionPageConnected as FlightSelectionPage } from "./FlightSelectionPage";

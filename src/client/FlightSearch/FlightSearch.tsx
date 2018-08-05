@@ -5,11 +5,10 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 
-import { Airport } from "ra-shared";
+import { Airport, Route } from "ra-shared";
 import { AppState, loadAirports } from "ra-store";
 import { SharedAction } from "ra-store/shared";
 
-import { Route } from "../Route";
 import { RouteSelector } from "../RouteSelector";
 import { TimetableService } from "../TimetableService";
 
