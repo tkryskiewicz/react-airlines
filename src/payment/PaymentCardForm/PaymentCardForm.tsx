@@ -5,6 +5,8 @@ import * as Moment from "moment";
 import * as React from "react";
 import { FormattedMessage, InjectedIntlProps, injectIntl } from "react-intl";
 
+import { propOf } from "ra-core";
+
 import { PaymentCard } from "../PaymentCard";
 import { PaymentCardType, SecurityCodeType } from "../PaymentCardType";
 import { paymentCardFormMessages } from "./messages";
@@ -30,7 +32,7 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
     return (
       <>
         <Form.Item label={<FormattedMessage {...paymentCardFormMessages.cardNumberLabel} />}>
-          {getFieldDecorator("cardNumber", {
+          {getFieldDecorator(propOf<PaymentCard>("cardNumber"), {
             rules: [
               {
                 message: formatMessage(paymentCardFormMessages.cardNumberEmptyError),
@@ -46,7 +48,7 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
             ],
           })(
             <Input
-              name="cardNumber"
+              name={propOf<PaymentCard>("cardNumber")}
               placeholder={formatMessage(paymentCardFormMessages.cardNumberPlaceholder)}
               maxLength={cardType.cardNumberLength}
               disabled={this.props.disabled}
@@ -55,7 +57,7 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
           )}
         </Form.Item>
         <Form.Item label={<FormattedMessage {...paymentCardFormMessages.cardTypeLabel} />}>
-          {getFieldDecorator("cardType", {
+          {getFieldDecorator(propOf<PaymentCard>("cardType"), {
             rules: [
               { required: this.props.required, message: formatMessage(paymentCardFormMessages.cardTypeEmptyError) },
             ],
@@ -71,7 +73,7 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
           )}
         </Form.Item>
         <Form.Item label={<FormattedMessage {...paymentCardFormMessages.expiryDateLabel} />}>
-          {getFieldDecorator("expiryDate", {
+          {getFieldDecorator(propOf<PaymentCard>("expiryDate"), {
             rules: [
               { required: this.props.required, message: formatMessage(paymentCardFormMessages.expiryDateEmptyError) },
             ],
@@ -85,7 +87,7 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
           )}
         </Form.Item>
         <Form.Item label={<FormattedMessage {...paymentCardFormMessages.securityCodeLabel} />}>
-          {getFieldDecorator("securityCode", {
+          {getFieldDecorator(propOf<PaymentCard>("securityCode"), {
             rules: [
               {
                 message: formatMessage(paymentCardFormMessages.securityCodeEmptyError),
@@ -98,7 +100,7 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
             ],
           })(
             <Input
-              name="securityCode"
+              name={propOf<PaymentCard>("securityCode")}
               placeholder={cardType.securityCodeType.toUpperCase()}
               maxLength={cardType.securityCodeLength}
               disabled={this.props.disabled}
@@ -107,13 +109,13 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
           )}
         </Form.Item>
         <Form.Item label={<FormattedMessage {...paymentCardFormMessages.cardholdersNameLabel} />}>
-          {getFieldDecorator("cardholdersName", {
+          {getFieldDecorator(propOf<PaymentCard>("cardholdersName"), {
             rules: [
               { required: this.props.required, message: formatMessage(paymentCardFormMessages.cardholdersNameEmptyError) },
             ],
           })(
             <Input
-              name="cardholdersName"
+              name={propOf<PaymentCard>("cardholdersName")}
               placeholder={formatMessage(paymentCardFormMessages.cardholdersNamePlaceholder)}
               maxLength={50}
               disabled={this.props.disabled}
@@ -169,7 +171,10 @@ export class PaymentCardForm extends React.Component<PaymentCardFormProps & Inje
     value.cardType = v.toString();
 
     this.props.onChange(value, () => {
-      this.props.form.validateFields(["cardNumber", "securityCode"], { force: true }, () => undefined);
+      this.props.form.validateFields([
+        propOf<PaymentCard>("cardNumber"),
+        propOf<PaymentCard>("securityCode"),
+      ], { force: true }, () => undefined);
     });
   }
 

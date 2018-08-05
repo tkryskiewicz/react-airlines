@@ -4,6 +4,8 @@ import { SelectValue } from "antd/lib/select";
 import * as React from "react";
 import { FormattedMessage, InjectedIntlProps, injectIntl } from "react-intl";
 
+import { propOf } from "ra-core";
+
 import { HonorificTitle, PassengerName } from "../PassengerName";
 import { getTitleMessage, passengerNameFormMessages } from "./messages";
 
@@ -26,7 +28,7 @@ export class PassengerNameForm extends React.Component<PassengerNameFormProps & 
     return (
       <>
         <Form.Item label={<FormattedMessage {...passengerNameFormMessages.titleLabel} />}>
-          {getFieldDecorator("title", {
+          {getFieldDecorator(propOf<PassengerName>("title"), {
             rules: [
               {
                 message: formatMessage(passengerNameFormMessages.titleEmptyError),
@@ -44,7 +46,7 @@ export class PassengerNameForm extends React.Component<PassengerNameFormProps & 
           )}
         </Form.Item>
         <Form.Item label={<FormattedMessage {...passengerNameFormMessages.firstNameLabel} />}>
-          {getFieldDecorator("firstName", {
+          {getFieldDecorator(propOf<PassengerName>("firstName"), {
             rules: [
               {
                 message: formatMessage(passengerNameFormMessages.firstNameEmptyError),
@@ -61,7 +63,7 @@ export class PassengerNameForm extends React.Component<PassengerNameFormProps & 
             ],
           })(
             <Input
-              name="firstName"
+              name={propOf<PassengerName>("firstName")}
               maxLength={50}
               placeholder={formatMessage(passengerNameFormMessages.firstNamePlaceholder)}
               disabled={this.props.disabled}
@@ -70,7 +72,7 @@ export class PassengerNameForm extends React.Component<PassengerNameFormProps & 
           )}
         </Form.Item>
         <Form.Item label={<FormattedMessage {...passengerNameFormMessages.lastNameLabel} />}>
-          {getFieldDecorator("lastName", {
+          {getFieldDecorator(propOf<PassengerName>("lastName"), {
             rules: [
               {
                 message: formatMessage(passengerNameFormMessages.lastNameEmptyError),
@@ -87,7 +89,7 @@ export class PassengerNameForm extends React.Component<PassengerNameFormProps & 
             ],
           })(
             <Input
-              name="lastName"
+              name={propOf<PassengerName>("lastName")}
               maxLength={50}
               placeholder={formatMessage(passengerNameFormMessages.lastNamePlaceholder)}
               disabled={this.props.disabled}

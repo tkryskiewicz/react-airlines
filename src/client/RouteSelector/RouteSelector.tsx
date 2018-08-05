@@ -4,6 +4,7 @@ import { SelectValue } from "antd/lib/select";
 import * as React from "react";
 import { FormattedMessage, InjectedIntlProps, injectIntl } from "react-intl";
 
+import { propOf } from "ra-core";
 import { Airport, messages } from "ra-shared";
 
 import { Route } from "../Route";
@@ -32,7 +33,7 @@ export class RouteSelector extends React.Component<RouteSelectorProps & Injected
           label={<FormattedMessage {...routeSelectorMessages.originLabel} />}
           required={this.props.isRequired}
         >
-          {getFieldDecorator("origin", {
+          {getFieldDecorator(propOf<Route>("origin"), {
             rules: [
               { required: this.props.isRequired, message: formatMessage(messages.emptyError) },
             ],
@@ -52,7 +53,7 @@ export class RouteSelector extends React.Component<RouteSelectorProps & Injected
           label={<FormattedMessage {...routeSelectorMessages.destinationLabel} />}
           required={this.props.isRequired}
         >
-          {getFieldDecorator("destination", {
+          {getFieldDecorator(propOf<Route>("destination"), {
             rules: [
               { required: this.props.isRequired, message: formatMessage(messages.emptyError) },
             ],
