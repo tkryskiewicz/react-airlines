@@ -1,1 +1,1 @@
-export { FlightSearchWrapped as FlightSearch } from "./FlightSearch";
+export { FlightSearchConnected as FlightSearch } from "./FlightSearch";

@@ -1,4 +1,4 @@
-export type AirportCode = string;
+import { AirportCode } from "./AirportCode";
 
 export class Airport {
   constructor(

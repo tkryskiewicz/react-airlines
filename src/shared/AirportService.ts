@@ -1,7 +1,7 @@
 import { AirportData, getAirportsUrl } from "ra-api";
+import { ServiceBase } from "ra-core";
 
 import { Airport } from "./Airport";
-import { ServiceBase } from "./ServiceBase";
 
 export class AirportService extends ServiceBase {
   public async getAll() {

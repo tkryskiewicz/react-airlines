@@ -1,9 +1,10 @@
 import { Button, Col, Row } from "antd";
 import * as Moment from "moment";
 import * as React from "react";
+import { FormattedNumber } from "react-intl";
 
-import { Airport } from "../Airport";
-import { AirportService } from "../AirportService";
+import { Airport, AirportService } from "ra-shared";
+
 import { Flight } from "../Flight";
 import { FlightService } from "../FlightService";
 import { Route } from "../Route";
@@ -85,7 +86,7 @@ export class FlightSelection extends React.Component<FlightSelectionProps, Fligh
         justify="center"
         align="middle"
       >
-        <Col span={18}>
+        <Col span={14}>
           <Row
             type="flex"
             justify="center"
@@ -95,19 +96,25 @@ export class FlightSelection extends React.Component<FlightSelectionProps, Fligh
             </Col>
           </Row>
           <Row>
-            <Col style={{ textAlign: "left" }} span={12}>
+            <Col style={{ textAlign: "left" }} span={10}>
               <div>
                 {flight.departureDate.format("HH:mm")}
               </div>
               {origin ? origin.name : flight.origin}
             </Col>
-            <Col style={{ textAlign: "right" }} span={12}>
+            <Col style={{ textAlign: "center" }} span={4}>
+              {flight.code}
+            </Col>
+            <Col style={{ textAlign: "right" }} span={10}>
               <div>
                 {flight.arrivalDate.format("HH:mm")}
               </div>
               {destination ? destination.name : flight.destination}
             </Col>
           </Row>
+        </Col>
+        <Col style={{ textAlign: "center" }} span={4}>
+          <FormattedNumber style="currency" value={flight.farePrice.amount} currency={flight.farePrice.currency} />
         </Col>
         <Col style={{ textAlign: "center" }} span={6}>
           <Button
@@ -129,9 +136,9 @@ export class FlightSelection extends React.Component<FlightSelectionProps, Fligh
   }
 
   private onContinue = () => {
-    const flight = this.state.flights.find((f) => f.id === this.state.selectedFlight);
+    const flight = this.state.flights.find((f) => f.id === this.state.selectedFlight)!;
 
     // tslint:disable-next-line
-    console.log(`Selected flight from ${flight!.origin} to ${flight!.destination} on ${flight!.departureDate.toDate()}`);
+    console.log(`Selected flight from ${flight.origin} to ${flight.destination} on ${flight.departureDate.toDate()}`);
   }
 }

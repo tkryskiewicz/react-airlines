@@ -2,9 +2,13 @@ import { Form, Select } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { SelectValue } from "antd/lib/select";
 import * as React from "react";
+import { FormattedMessage, InjectedIntlProps, injectIntl } from "react-intl";
 
-import { Airport } from "../Airport";
+import { propOf } from "ra-core";
+import { Airport, messages } from "ra-shared";
+
 import { Route } from "../Route";
+import { routeSelectorMessages } from "./messages";
 
 export interface RouteSelectorProps extends FormComponentProps {
   airports: Airport[];
@@ -14,9 +18,10 @@ export interface RouteSelectorProps extends FormComponentProps {
   onChange?: (value: Route) => void;
 }
 
-export class RouteSelector extends React.Component<RouteSelectorProps> {
+export class RouteSelector extends React.Component<RouteSelectorProps & InjectedIntlProps> {
   public render() {
     const { getFieldDecorator } = this.props.form;
+    const { formatMessage } = this.props.intl;
 
     const origin = this.props.airports.find((a) => a.code === this.props.value.origin);
 
@@ -25,17 +30,18 @@ export class RouteSelector extends React.Component<RouteSelectorProps> {
     return (
       <div>
         <Form.Item
-          label="Origin"
+          label={<FormattedMessage {...routeSelectorMessages.originLabel} />}
           required={this.props.isRequired}
         >
-          {getFieldDecorator("origin", {
+          {getFieldDecorator(propOf<Route>("origin"), {
             rules: [
-              { required: this.props.isRequired, message: "This field is required" },
+              { required: this.props.isRequired, message: formatMessage(messages.emptyError) },
             ],
           })(
             <Select
               style={{ width: "100%" }}
-              placeholder="Select origin"
+              placeholder={<FormattedMessage {...routeSelectorMessages.originPlaceholder} />}
+              notFoundContent={<FormattedMessage {...routeSelectorMessages.originNoData} />}
               disabled={this.props.isDisabled}
               onChange={this.onOriginChange}
             >
@@ -44,17 +50,18 @@ export class RouteSelector extends React.Component<RouteSelectorProps> {
           )}
         </Form.Item>
         <Form.Item
-          label="Destination"
+          label={<FormattedMessage {...routeSelectorMessages.destinationLabel} />}
           required={this.props.isRequired}
         >
-          {getFieldDecorator("destination", {
+          {getFieldDecorator(propOf<Route>("destination"), {
             rules: [
-              { required: this.props.isRequired, message: "This field is required" },
+              { required: this.props.isRequired, message: formatMessage(messages.emptyError) },
             ],
           })(
             <Select
               style={{ width: "100%" }}
-              placeholder="Select destination"
+              placeholder={<FormattedMessage {...routeSelectorMessages.destinationPlaceholder} />}
+              notFoundContent={<FormattedMessage {...routeSelectorMessages.destinationNoData} />}
               disabled={this.props.isDisabled}
               onChange={this.onDestinationChange}
             >
@@ -111,3 +118,5 @@ export class RouteSelector extends React.Component<RouteSelectorProps> {
     this.props.onChange(value);
   }
 }
+
+export const RouteSelectorWrapped = injectIntl(RouteSelector);

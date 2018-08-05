@@ -1,1 +1,1 @@
-export { RouteSelector } from "./RouteSelector";
+export { RouteSelectorWrapped as RouteSelector } from "./RouteSelector";

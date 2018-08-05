@@ -1,9 +1,9 @@
 import * as Moment from "moment";
 
 import { getDepartureDatesUrl } from "ra-api";
+import { ServiceBase } from "ra-core";
 
 import { Route } from "./Route";
-import { ServiceBase } from "./ServiceBase";
 
 export class TimetableService extends ServiceBase {
   public async getDepartureDates(route: Route) {

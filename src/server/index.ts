@@ -4,6 +4,8 @@ import * as Express from "express";
 import { createDocumentStore, initializeDocumentStore } from "ra-document-store";
 
 import { registerAirportsApi } from "./airports";
+import { registerCountriesApi } from "./countries";
+import { registerPaymentCardsApi } from "./paymentCards";
 import { ravenDbRequestHandler } from "./ravenDbRequestHandler";
 import { registerTimetableApi } from "./timetable";
 
@@ -25,7 +27,9 @@ app.get("/init", async (_req, res) => {
   }
 });
 
+registerCountriesApi(app);
 registerAirportsApi(app);
+registerPaymentCardsApi(app);
 registerTimetableApi(app);
 
 const Port = 5000;

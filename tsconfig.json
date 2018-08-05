@@ -13,6 +13,15 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "paths": {
+      "@storybook/*": [
+        "types/@storybook/*"
+      ],
+      "storybook-addon-intl": [
+        "types/storybook-addon-intl"
+      ],
+      "storybook-addon-intl/*": [
+        "types/storybook-addon-intl/*"
+      ],
       "ra-*": [
         "src/*"
       ]
